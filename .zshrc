@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 DEFAULT_USER="sago"
 # If you come from bash you might have to change your $PATH.
 export PATH=/usr/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH
@@ -9,7 +16,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="agnoster"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -79,8 +86,8 @@ source $ZSH/oh-my-zsh.sh
 
 export PATH="$HOME/scripts:$PATH"
 export PATH=$PATH:/usr/local/go/bin
-export AWS_DEFAULT_PROFILE="default"
-export AWS_DEFAULT_REGION=ap-southeast-2
+export AWS_PROFILE="default"
+export AWS_REGION="ap-southeast-2"
 set -o ignoreeof
 set ignoreeof=3
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -124,13 +131,13 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #aws autocomplete
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
-complete -C '/usr/local/bin/aws_completer' aws
+complete -C '/home/linuxbrew/.linuxbrew/bin/aws_completer' aws
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
+complete -o nospace -C /home/linuxbrew/.linuxbrew/bin/terraform terraform
 
-if [ -e /home/paul-rdc/.nix-profile/etc/profile.d/nix.sh ]; then . /home/paul-rdc/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e /home/sago/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sago/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
@@ -141,3 +148,11 @@ eval "$(pyenv init -)"
 #Deno
 export DENO_INSTALL="/home/paul-rdc/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  exec tmux new-session -A -s main
+fi
