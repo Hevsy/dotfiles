@@ -11,7 +11,7 @@
 # hlsearch on (H) or off (h):
 ~h
 # Last Search Pattern:
-~MSle0~/zb
+~MSle0~/enable
 
 # Last Substitute Search Pattern:
 ~MSle0&kilall
@@ -20,6 +20,10 @@
 $
 
 # Command Line History (newest to oldest):
+:Ex
+|2,0,1712220865,,"Ex"
+:Lazy
+|2,0,1712118215,,"Lazy"
 :q!
 |2,0,1711501063,,"q!"
 :lazy
@@ -40,8 +44,18 @@ $
 |2,0,1705294850,,"open"
 
 # Search String History (newest to oldest):
+?/858066369439
+|2,1,1712799211,47,"858066369439"
+?/plugin
+|2,1,1712402575,47,"plugin"
+??\a
+|2,1,1712220865,63,"\\a"
 ? @$
-|2,1,1709792199,,"@$"
+|2,1,1712220865,,"@$"
+?/sus
+|2,1,1712118263,47,"sus"
+?/enable
+|2,1,1712118230,47,"enable"
 ?/zb
 |2,1,1708992533,47,"zb"
 ?/alias
@@ -72,10 +86,9 @@ $
 # Debug Line History (newest to oldest):
 
 # Registers:
-""0	LINE	0
-	  AWS_ACCESS_KEY_ID: QUtJQVhaT0ZPNkk0TVZXNFhKTzI=
-	  AWS_SECRET_ACCESS_KEY: cEZMOGtPM082UUh4RDN2QXJ2emZTUHBjd1VUOWNoNTRVdU9JK3dzOQ==
-|3,1,0,1,2,0,1709792215,"  AWS_ACCESS_KEY_ID: QUtJQVhaT0ZPNkk0TVZXNFhKTzI=","  AWS_SECRET_ACCESS_KEY: cEZMOGtPM082UUh4RDN2QXJ2emZTUHBjd1VUOWNoNTRVdU9JK3dzOQ=="
+""0	CHAR	0
+	e
+|3,1,0,0,1,0,1712220865,"e"
 "1	LINE	0
 	  AWS_ACCESS_KEY_ID: QUtJQVhaT0ZPNkk0TVZXNFhKTzI=
 	  AWS_SECRET_ACCESS_KEY: cEZMOGtPM082UUh4RDN2QXJ2emZTUHBjd1VUOWNoNTRVdU9JK3dzOQ==
@@ -267,234 +280,375 @@ $
 |3,0,9,1,24,0,1706661030,"#!/bin/bash","","# Default region and profile","REGION=\"us-east-1\"","PROFILE=\"default\"","DRY_RUN=0","","# Usage information","function usage {","    echo \"Usage: $0 [--region aws-region] [--profile aws-profile] [--dry-run]\"","    exit 1","}","","# Parse command-line arguments","while [[ \"$#\" -gt 0 ]]; do","    case $1 in","        --region) REGION=\"$2\"; shift ;;","        --profile) PROFILE=\"$2\"; shift ;;",>33
 |<"        --dry-run) DRY_RUN=1 ;;","        *) usage ;;","    esac","    shift","done",""
 "-	CHAR	0
-	zb
-|3,0,36,0,1,0,1708992523,"zb"
+	e
+|3,0,36,0,1,0,1712181526,"e"
 
 # File marks:
-'0  1  0  /tmp/kubectl-edit-421857015.yaml
-|4,48,1,0,1711511697,"/tmp/kubectl-edit-421857015.yaml"
-'1  1  0  /tmp/kubectl-edit-255895393.yaml
-|4,49,1,0,1711502720,"/tmp/kubectl-edit-255895393.yaml"
-'2  1  0  /tmp/kubectl-edit-2669396671.yaml
-|4,50,1,0,1711501066,"/tmp/kubectl-edit-2669396671.yaml"
-'3  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,51,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
-'4  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,52,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
-'5  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,53,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
-'6  49  0  ~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf
-|4,54,49,0,1709792253,"~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf"
-'7  1  0  /tmp/kubectl-edit-2799983077.yaml
-|4,55,1,0,1709185226,"/tmp/kubectl-edit-2799983077.yaml"
-'8  7  2  /tmp/kubectl-edit-2969921541.yaml
-|4,56,7,2,1709178358,"/tmp/kubectl-edit-2969921541.yaml"
-'9  60  0  /tmp/kubectl-edit-4044470881.yaml
-|4,57,60,0,1708996445,"/tmp/kubectl-edit-4044470881.yaml"
+'0  8  0  /tmp/kubectl-edit-2594475879.yaml
+|4,48,8,0,1712903162,"/tmp/kubectl-edit-2594475879.yaml"
+'1  1  2  /tmp/kubectl-edit-3948795228.yaml
+|4,49,1,2,1712880096,"/tmp/kubectl-edit-3948795228.yaml"
+'2  1  0  ~/Projects/RDC_TF/rdc-250-terraform/README.md
+|4,50,1,0,1712816376,"~/Projects/RDC_TF/rdc-250-terraform/README.md"
+'3  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,51,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+'4  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,52,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+'5  155  6  ~/.kube/config
+|4,53,155,6,1712799294,"~/.kube/config"
+'6  115  0  ~/.aws/config
+|4,54,115,0,1712799214,"~/.aws/config"
+'7  1  0  ~/.gitconfig
+|4,55,1,0,1712789963,"~/.gitconfig"
+'8  1  0  ~/Projects/RDC_TF/rdc-320-terraform/zb-i4/k8s/use_terraform/2003_persistentVolume_efs-pv-vault.yml
+|4,56,1,0,1712729930,"~/Projects/RDC_TF/rdc-320-terraform/zb-i4/k8s/use_terraform/2003_persistentVolume_efs-pv-vault.yml"
+'9  1  0  ~/Projects/RDC_TF/rdc-320-terraform/full-installation-template/raw_files/app_config/admin-service-{short_name}.yml
+|4,57,1,0,1712728887,"~/Projects/RDC_TF/rdc-320-terraform/full-installation-template/raw_files/app_config/admin-service-{short_name}.yml"
 
 # Jumplist (newest first):
--'  1  0  /tmp/kubectl-edit-421857015.yaml
-|4,39,1,0,1711511697,"/tmp/kubectl-edit-421857015.yaml"
--'  1  0  /tmp/kubectl-edit-255895393.yaml
-|4,39,1,0,1711502720,"/tmp/kubectl-edit-255895393.yaml"
--'  1  0  /tmp/kubectl-edit-255895393.yaml
-|4,39,1,0,1711502720,"/tmp/kubectl-edit-255895393.yaml"
--'  1  0  /tmp/kubectl-edit-2669396671.yaml
-|4,39,1,0,1711501066,"/tmp/kubectl-edit-2669396671.yaml"
--'  1  0  /tmp/kubectl-edit-2669396671.yaml
-|4,39,1,0,1711501066,"/tmp/kubectl-edit-2669396671.yaml"
--'  1  0  /tmp/kubectl-edit-2669396671.yaml
-|4,39,1,0,1711501066,"/tmp/kubectl-edit-2669396671.yaml"
--'  1  0  /tmp/kubectl-edit-2669396671.yaml
-|4,39,1,0,1711501066,"/tmp/kubectl-edit-2669396671.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-523967439.yaml
-|4,39,1,0,1711501063,"/tmp/kubectl-edit-523967439.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  1  0  /tmp/kubectl-edit-794037269.yaml
-|4,39,1,0,1711501055,"/tmp/kubectl-edit-794037269.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  9  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,9,0,1711501049,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  1  0  /tmp/kubectl-edit-80522619.yaml
-|4,39,1,0,1711500776,"/tmp/kubectl-edit-80522619.yaml"
--'  49  0  ~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf
-|4,39,49,0,1709792253,"~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf"
--'  49  0  ~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf
-|4,39,49,0,1709792253,"~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf"
--'  49  0  ~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf
-|4,39,49,0,1709792253,"~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf"
--'  49  0  ~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf
-|4,39,49,0,1709792253,"~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf"
--'  49  0  ~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf
-|4,39,49,0,1709792253,"~/Code/RDC_TF/terrraform-resource/16_01_pv_efs_sso.tf"
+-'  8  0  /tmp/kubectl-edit-2594475879.yaml
+|4,39,8,0,1712903162,"/tmp/kubectl-edit-2594475879.yaml"
+-'  1  0  /tmp/kubectl-edit-2594475879.yaml
+|4,39,1,0,1712903124,"/tmp/kubectl-edit-2594475879.yaml"
+-'  1  2  /tmp/kubectl-edit-3948795228.yaml
+|4,39,1,2,1712880096,"/tmp/kubectl-edit-3948795228.yaml"
+-'  1  2  /tmp/kubectl-edit-3948795228.yaml
+|4,39,1,2,1712880096,"/tmp/kubectl-edit-3948795228.yaml"
+-'  1  0  ~/Projects/RDC_TF/rdc-250-terraform/README.md
+|4,39,1,0,1712816376,"~/Projects/RDC_TF/rdc-250-terraform/README.md"
+-'  1  0  ~/Projects/RDC_TF/rdc-250-terraform/README.md
+|4,39,1,0,1712816376,"~/Projects/RDC_TF/rdc-250-terraform/README.md"
+-'  1  0  ~/Projects/RDC_TF/rdc-250-terraform/README.md
+|4,39,1,0,1712816376,"~/Projects/RDC_TF/rdc-250-terraform/README.md"
+-'  1  0  ~/Projects/RDC_TF/rdc-250-terraform/README.md
+|4,39,1,0,1712816376,"~/Projects/RDC_TF/rdc-250-terraform/README.md"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+|4,39,1,0,1712815960,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  1  0  ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+|4,39,1,0,1712815944,"~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  155  6  ~/.kube/config
+|4,39,155,6,1712799294,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  1  0  ~/.kube/config
+|4,39,1,0,1712799236,"~/.kube/config"
+-'  115  0  ~/.aws/config
+|4,39,115,0,1712799214,"~/.aws/config"
+-'  115  0  ~/.aws/config
+|4,39,115,0,1712799214,"~/.aws/config"
+-'  115  0  ~/.aws/config
+|4,39,115,0,1712799214,"~/.aws/config"
+-'  115  0  ~/.aws/config
+|4,39,115,0,1712799214,"~/.aws/config"
 
 # History of marks within files (newest to oldest):
+
+> /tmp/kubectl-edit-2594475879.yaml
+	*	1712903142	0
+	"	8	0
+
+> /tmp/kubectl-edit-3948795228.yaml
+	*	1712880093	0
+	"	1	2
+	.	1	1
+	+	1	1
+
+> ~/Projects/RDC_TF/rdc-250-terraform/README.md
+	*	1712816373	0
+	"	1	0
+
+> ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-jenkins-sg-NEW/ec2.tf
+	*	1712815957	0
+	"	1	0
+
+> ~/Projects/RDC_TF/rdc-260-terraform/OPERATION/rd-zabbix-NEW/rd-zabbix-sg-NEW/variables.tf
+	*	1712815941	0
+	"	1	0
+
+> ~/.kube/config
+	*	1712799292	0
+	"	155	6
+
+> ~/.aws/config
+	*	1712799213	0
+	"	115	0
+	^	91	8
+	.	91	7
+	+	97	0
+	+	91	0
+	+	92	0
+	+	91	7
+
+> ~/.gitconfig
+	*	1712789958	0
+	"	1	0
+
+> ~/Projects/RDC_TF/rdc-320-terraform/zb-i4/k8s/use_terraform/2003_persistentVolume_efs-pv-vault.yml
+	*	1712729929	0
+	"	1	0
+
+> ~/Projects/RDC_TF/rdc-320-terraform/full-installation-template/raw_files/app_config/admin-service-{short_name}.yml
+	*	1712728886	0
+	"	1	0
+
+> ~/Projects/RDC_TF/rdc-320-terraform/test/ops_packages/app_config/admin-service.yml
+	*	1712728755	0
+	"	1	0
+	.	1	0
+	+	1	0
+
+> ~/.tmux.conf
+	*	1712549875	0
+	"	1	0
+
+> ~/Projects/RDC_TF/bnz130-terraform/delta-script/310-full.csv
+	*	1712539556	0
+	"	10	0
+
+> ~/.zshrc
+	*	1712402575	0
+	"	58	0
+	^	112	52
+	.	112	51
+	+	109	16
+	+	112	29
+	+	81	34
+	+	80	4
+	+	80	6
+	+	112	0
+	+	82	0
+	+	86	0
+	+	82	43
+	+	83	39
+	+	82	31
+	+	112	116
+	+	112	0
+	+	117	0
+	+	122	45
+	+	115	19
+	+	122	0
+	+	114	22
+	+	110	17
+	+	111	17
+	+	86	0
+	+	84	17
+	+	85	0
+	+	84	16
+	+	85	4
+	+	74	29
+	+	116	42
+	+	117	0
+	+	28	0
+	+	29	0
+	+	112	0
+	+	112	51
+
+> ~/.tmux/plugins/tpm/README.md
+	*	1712402407	0
+	"	1	0
+
+> ~/.tmux/plugins/tpm/HOW_TO_PLUGIN.md
+	*	1712402377	0
+	"	1	0
+
+> ~/Projects/pipeline_playground/tf-playground/live/network/02_01_vpc_subnet.tf
+	*	1712372497	0
+	"	1	0
+
+> ~/.config/mc/ini
+	*	1712365676	0
+	"	138	0
+
+> /tmp/kubectl-edit-1271257941.yaml
+	*	1712270999	0
+	"	1	0
+
+> ~/.config/lazygit/config.yml
+	*	1712181530	0
+	"	2	20
+	^	2	21
+	.	2	20
+	+	2	23
+	+	1	0
+	+	2	20
+
+> /tmp/kubectl-edit-1814447715.yaml
+	*	1712118266	0
+	"	73	12
+
+> /tmp/kubectl-edit-454957437.yaml
+	*	1712118247	0
+	"	83	10
+
+> ~/wguard_pparinov_aunsw.conf
+	*	1712117483	0
+	"	8	0
 
 > /tmp/kubectl-edit-421857015.yaml
 	*	1711511693	0
@@ -619,44 +773,6 @@ $
 	*	1707191710	0
 	"	1	0
 
-> ~/.zshrc
-	*	1707189282	0
-	"	112	51
-	^	112	52
-	.	112	51
-	+	109	16
-	+	112	29
-	+	81	34
-	+	80	4
-	+	80	6
-	+	112	0
-	+	82	0
-	+	86	0
-	+	82	43
-	+	83	39
-	+	82	31
-	+	112	116
-	+	112	0
-	+	117	0
-	+	122	45
-	+	115	19
-	+	122	0
-	+	114	22
-	+	110	17
-	+	111	17
-	+	86	0
-	+	84	17
-	+	85	0
-	+	84	16
-	+	85	4
-	+	74	29
-	+	116	42
-	+	117	0
-	+	28	0
-	+	29	0
-	+	112	0
-	+	112	51
-
 > ~/.zsh
 	*	1706847590	0
 	"	1	0
@@ -741,16 +857,6 @@ $
 	^	2	115
 	.	2	114
 	+	2	114
-
-> ~/.aws/config
-	*	1705961596	0
-	"	115	0
-	^	91	8
-	.	91	7
-	+	97	0
-	+	91	0
-	+	92	0
-	+	91	7
 
 > ~/scripts/build_sso_creds_file.sh
 	*	1705904103	0

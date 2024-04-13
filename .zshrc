@@ -96,11 +96,13 @@ set ignoreeof=3
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+  export VISUAL='nvim'
+  export VISUAL EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -125,7 +127,10 @@ alias od='onedrive_gui'
 alias tf='terraform'
 alias tfaa='terraform apply -auto-approve'
 alias tfss='terraform state show'
+alias rg='ranger'
 alias lg='lazygit'
+alias ll='la -la'
+alias ll='ls -l'
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #aws autocomplete
