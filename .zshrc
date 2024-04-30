@@ -131,7 +131,10 @@ alias rg='ranger'
 alias lg='lazygit'
 alias ll='la -la'
 alias ll='ls -l'
+alias pip="pyenv exec pip"
+alias python="python3"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(pyenv virtualenv-init -)"
 
 #aws autocomplete
 autoload bashcompinit && bashcompinit
