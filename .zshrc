@@ -127,12 +127,16 @@ alias od='onedrive_gui'
 alias tf='terraform'
 alias tfaa='terraform apply -auto-approve'
 alias tfss='terraform state show'
-alias rg='ranger'
+alias tg='terragrunt'
+alias tgp='terragrunt run-all plan'
+alias tga='terragrunt run-all apply -auto-approve'
+alias rg='source ranger ranger'
 alias lg='lazygit'
 alias ll='la -la'
 alias ll='ls -l'
 alias pip="pyenv exec pip"
 alias python="python3"
+alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(pyenv virtualenv-init -)"
 

@@ -624,7 +624,9 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-        terraformls = {},
+        terraformls = {
+          filetypes = { 'terraform', 'terraform-vars', 'hcl' },
+        },
         tflint = {},
 
         lua_ls = {
@@ -697,6 +699,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         tf = { 'terraform_fmt' },
+        hcl = { 'hclfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -929,6 +932,7 @@ require('lazy').setup({
 vim.keymap.set('n', '<leader>bn', ':bn<cr>', { desc = 'Move to the next buffer' })
 vim.keymap.set('n', '<leader>bp', ':bp<cr>', { desc = 'Move to the previuos buffer' })
 vim.keymap.set('n', '<leader>bd', ':Neotree close<cr>:bd<cr>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<leader>bD', ':%bd|e#|bd#<cr>', { desc = 'Delete all buffers except current' })
 vim.keymap.set('n', '\\', ':Neotree reveal toggle<cr>', { desc = 'Open File Tree window' })
 vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
 vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
