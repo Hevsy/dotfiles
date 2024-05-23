@@ -241,8 +241,8 @@ require('lazy').setup({
   -- NOTE: PP - My plugins:
   {
     'akinsho/bufferline.nvim',
-    barnch = 'main',
-    commit = '73540cb95f8d95aa1af3ed57713c6720c78af915',
+    branch = 'main',
+    -- commit = '73540cb95f8d95aa1af3ed57713c6720c78af915',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     opts = {
@@ -333,6 +333,7 @@ require('lazy').setup({
       'rcarriga/nvim-notify',
     },
   },
+  { 'towolf/vim-helm' },
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle

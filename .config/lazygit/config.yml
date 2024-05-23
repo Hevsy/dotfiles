@@ -2,3 +2,6 @@ os:
     editPreset: 'nvim'
 gui:
   nerdFontsVersion: "3"
+git:
+  pull:
+    mode: 'rebase'
