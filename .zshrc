@@ -141,6 +141,8 @@ alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/conf
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(pyenv virtualenv-init -)"
 
+export PATH="$HOME/Projects/delta-script:$PATH" 
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 #aws autocomplete
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
@@ -171,3 +173,4 @@ eval "$(fzf --zsh)"
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   exec tmux new-session -A -s main
 fi
+export PATH="/home/linuxbrew/.linuxbrew/opt/mysql@8.0/bin:$PATH"
