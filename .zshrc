@@ -174,3 +174,4 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
   exec tmux new-session -A -s main
 fi
 export PATH="/home/linuxbrew/.linuxbrew/opt/mysql@8.0/bin:$PATH"
+export PATH="$PATH:/mnt/c/Windows/System32:/mnt/c/Windows\SysWOW64"

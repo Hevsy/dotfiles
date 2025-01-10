@@ -743,6 +743,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         tf = { 'terraform_fmt' },
         hcl = { 'hclfmt' },
+        sh = { 'beautysh' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -915,7 +916,7 @@ require('lazy').setup({
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'markdown_inline' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
@@ -1072,3 +1073,18 @@ vim.keymap.set('n', '<leader>Sp', '<cmd>lua require("spectre").open_file_search(
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
+
+-- NOTE: PP - pylsp configuration
+
+require('lspconfig').pylsp.setup {
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = { 'W391' },
+          maxLineLength = 100,
+        },
+      },
+    },
+  },
+}
