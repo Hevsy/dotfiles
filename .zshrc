@@ -78,7 +78,7 @@ zstyle ':omz:update' mode auto      # update automatically without asking
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pipenv terraform)
+plugins=(git pipenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -124,9 +124,14 @@ alias kx="kubectx"
 alias update="sudo apt update && sudo apt upgrade -y&& brew update && brew upgrade"
 alias logmein='rm -f ~/.aws/credentials && aws sso login --sso-session Paul-SSO && ~/scripts/build_sso_creds_file.sh'
 alias od='onedrive_gui'
-alias tf='terraform'
-alias tfaa='terraform apply -auto-approve'
-alias tfss='terraform state show'
+alias tf='tofu'
+alias tfa='tofu apply'
+alias tfv='tofu validate'
+alias tfi='tofu init'
+alias tfd='tofu destroy'
+alias tfaa='tofu apply -auto-approve'
+alias tfs='tofu state'
+alias tfss='tofu state show'
 alias tg='terragrunt'
 alias tgd='terragrunt destroy'
 alias tgp='terragrunt run-all plan'
@@ -150,7 +155,6 @@ complete -C '/home/linuxbrew/.linuxbrew/bin/aws_completer' aws
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /home/linuxbrew/.linuxbrew/bin/terraform terraform
 
 if [ -e /home/sago/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sago/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 export PYENV_ROOT="$HOME/.pyenv"
