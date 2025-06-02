@@ -119,3 +119,5 @@ fi
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 complete -C /usr/bin/terraform terraform
+
+complete -C /home/sago/.tenv/OpenTofu/1.9.1/tofu tofu
