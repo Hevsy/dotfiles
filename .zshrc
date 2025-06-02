@@ -126,6 +126,7 @@ alias logmein='rm -f ~/.aws/credentials && aws sso login --sso-session Paul-SSO 
 alias od='onedrive_gui'
 alias tf='tofu'
 alias tfa='tofu apply'
+alias tfp='tofu plan'
 alias tfv='tofu validate'
 alias tfi='tofu init'
 alias tfd='tofu destroy'
