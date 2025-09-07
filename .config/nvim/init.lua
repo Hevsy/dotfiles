@@ -670,7 +670,9 @@ require('lazy').setup({
         terraformls = {
           filetypes = { 'terraform', 'terraform-vars', 'hcl' },
         },
-        tflint = {},
+        tflint = {
+          filetypes = { 'terraform', 'terraform-vars', 'hcl' },
+        },
 
         lua_ls = {
           -- cmd = {...},
