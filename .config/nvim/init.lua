@@ -1090,3 +1090,6 @@ require('lspconfig').pylsp.setup {
     },
   },
 }
+
+-- NOTE: PP - disable logging
+vim.lsp.set_log_level(vim.log.levels.OFF)
