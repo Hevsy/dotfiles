@@ -184,4 +184,4 @@ fi
 export PATH="/home/linuxbrew/.linuxbrew/opt/mysql@8.0/bin:$PATH"
 export PATH="$PATH:/mnt/c/Windows/System32:/mnt/c/Windows\SysWOW64"
 
-complete -o nospace -C /home/sago/.tenv/OpenTofu/1.9.1/tofu tofu
+complete -o nospace -C /home/sago/.tenv/OpenTofu/1.9.3/tofu tofu

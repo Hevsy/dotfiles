@@ -667,9 +667,6 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-        terraformls = {
-          filetypes = { 'terraform', 'terraform-vars', 'hcl' },
-        },
         tflint = {
           filetypes = { 'terraform', 'terraform-vars', 'hcl' },
         },
@@ -844,7 +841,7 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
-          { name = 'terraformls' },
+          { name = 'tofu_ls' },
         },
       }
     end,
@@ -1091,5 +1088,22 @@ require('lspconfig').pylsp.setup {
   },
 }
 
--- NOTE: PP - disable logging
+-- NOTE: PP - disable LSP logging
 vim.lsp.set_log_level(vim.log.levels.OFF)
+
+-- tofu-ls lsp setup
+vim.lsp.config['tofu_ls'] = {
+  cmd = { 'tofu-ls', 'serve' },
+  -- Base filetypes
+  filetypes = { 'terraform', 'terraform-vars' },
+  root_markers = { '.terraform', '.git' },
+}
+
+vim.lsp.enable 'tofu_ls'
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = { '*.tf', '*.tfvars', '*.tofu' },
+  callback = function()
+    vim.lsp.buf.format { async = false }
+  end,
+})
