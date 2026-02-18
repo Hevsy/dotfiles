@@ -702,9 +702,6 @@ require("lazy").setup({
 				--
 				-- But for many setups, the LSP (`ts_ls`) will work just fine
 				-- ts_ls = {},
-				-- tflint = {
-				-- 	filetypes = { "terraform", "terraform-vars", "hcl" },
-				-- },
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -909,28 +906,23 @@ require("lazy").setup({
 		-- change the command in the config to whatever the name of that colorscheme is.
 		--
 		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
+		"catppuccin/nvim",
+		name = "catppuccin",
 		lazy = false, -- make sure we load this during startup if it is your main colorscheme
 		priority = 1000, -- Make sure to load this before all the other start plugins.
 		config = function()
 			---@diagnostic disable-next-line: missing-fields
-			require("tokyonight").setup({
-				--		styles = {
-				--			comments = { italic = false }, -- Disable italics in comments
-				--		},
-				on_highlights = function(hl, c)
-					hl["hclStringInterp"] = { link = "@variable.parameter" }
-					hl["hclBlockBody"] = { link = "Constant" }
-					hl["@lsp.type.variable.terraform"] = { link = "@variable.parameter" }
-					hl["@lsp.type.property.terraform"] = { fg = c.magenta }
-					hl["@lsp.typemod.enumMember.defaultLibrary.terraform"] = { fg = c.green1 }
-				end,
+			require("catppuccin").setup({
+				flavour = "mocha", -- latte, frappe, macchiato, mocha
+				background = { -- :h background
+					dark = "mocha",
+				},
 			})
 
 			-- Load the colorscheme here.
 			-- Like many other themes, this one has different styles, and you could load
 			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
+			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
 
@@ -1164,26 +1156,14 @@ vim.lsp.config["pylsp"] = {
 		pylsp = {
 			plugins = {
 				pycodestyle = {
-					ignore = { "W391" },
+					ignore = { "W391", "W503" },
 					maxLineLength = 100,
 				},
 			},
 		},
 	},
 }
--- Deprecated lsp config syntax for pylsp
---require('lspconfig').pylsp.setup {
---  settings = {
---    pylsp = {
---      plugins = {
---        pycodestyle = {
---          ignore = { 'W391' },
---          maxLineLength = 100,
---        },
---      },
---    },
---  },
---}
+vim.lsp.enable("pylsp")
 
 -- NOTE: PP - disable LSP logging
 vim.lsp.set_log_level(vim.log.levels.OFF)
@@ -1205,6 +1185,12 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
+vim.lsp.config["tflint"] = {
+	pattern = { "*.tf", "*.tfvars", "*.tofu" },
+	filetypes = { "terraform" },
+}
+
+vim.lsp.enable("tflint")
 -- vim.lsp.enable 'terraformls'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
