@@ -702,6 +702,7 @@ require("lazy").setup({
 				--
 				-- But for many setups, the LSP (`ts_ls`) will work just fine
 				-- ts_ls = {},
+				-- bashls = {},
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -716,6 +717,13 @@ require("lazy").setup({
 				"lua-language-server", -- Lua Language server
 				"stylua", -- Used to format Lua code
 				-- You can add other tools here that you want Mason to install
+				"yaml-language-server", -- YAML Language Server (supports GitLab CI)
+				"yamllint", -- YAML syntax linter
+				"terraform-ls", -- Terraform Language Server (supplements tofu-ls)
+				"tofu-ls",
+				"tflint",
+				"python-lsp-server",
+				-- "bash-language-server",
 			})
 
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
@@ -757,6 +765,44 @@ require("lazy").setup({
 				},
 			})
 			vim.lsp.enable("lua_ls")
+
+			vim.lsp.config("yamlls", {
+				settings = {
+					yaml = {
+						schemas = {
+							["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = {
+								"*.gitlab-ci.yml",
+								".gitlab-ci.yml",
+							},
+							kubernetes = {
+								"*_deployment_*.yml",
+								"*_deployment_*.yaml",
+								"*_service_*.yml",
+								"*_service_*.yaml",
+								"*_spc_*.yml",
+								"*_spc_*.yaml",
+								"*_configmap_*.yml",
+								"*_configmap_*.yaml",
+								"*_configMap_*.yml",
+								"*_configMap_*.yaml",
+								"*_template_*.yml",
+								"*_template_*.yaml",
+								"*_job_*.yml",
+								"*_job_*.yaml",
+								"*_secrets_*.yml",
+								"*_secrets_*.yaml",
+								"*_role*.yml",
+								"*_role*.yaml",
+								"*_clusterRole*.yml",
+								"*_clusterRole*.yaml",
+								"k8s/*.yml",
+								"k8s/*.yaml",
+							},
+						},
+					},
+				},
+			})
+			vim.lsp.enable("yamlls")
 		end,
 	},
 
@@ -1171,27 +1217,85 @@ vim.lsp.set_log_level(vim.log.levels.OFF)
 -- tofu-ls lsp setup
 vim.lsp.config["tofu_ls"] = {
 	cmd = { "tofu-ls", "serve" },
-	-- Base filetypes
 	pattern = { "*.tf", "*.tfvars", "*.tofu" },
 	filetypes = { "terraform" },
 	root_markers = { ".terraform", ".git" },
+	on_new_config = function(config)
+		local base_capabilities = require("blink.cmp").get_lsp_capabilities()
+
+		config.capabilities = {
+			general = base_capabilities.general or {},
+			textDocument = {
+				hover = base_capabilities.textDocument.hover or { dynamicRegistration = true },
+				definition = base_capabilities.textDocument.definition or { dynamicRegistration = true },
+				formatting = base_capabilities.textDocument.formatting or { dynamicRegistration = true },
+				rangeFormatting = base_capabilities.textDocument.rangeFormatting or { dynamicRegistration = true },
+				publishDiagnostics = base_capabilities.textDocument.publishDiagnostics,
+			},
+			workspace = base_capabilities.workspace or {},
+		}
+	end,
 }
 vim.lsp.enable("tofu_ls")
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = { "*.tf", "*.tfvars", "*.tofu" },
 	callback = function()
-		vim.lsp.buf.format({ async = false })
+		vim.lsp.buf.format({
+			async = false,
+			filter = function(client)
+				return client.name == "tofu_ls"
+			end,
+		})
 	end,
 })
 
-vim.lsp.config["tflint"] = {
+-- NOTE: tflint config moved to kickstart/plugins/lint.lua to sit with other linters
+-- vim.lsp.config["tflint"] = {
+-- 	pattern = { "*.tf", "*.tfvars", "*.tofu" },
+-- 	filetypes = { "terraform" },
+-- }
+-- vim.lsp.enable("tflint")
+
+-- terraform-ls (supplementary) - provides enhanced features alongside tofu-ls
+vim.lsp.config("terraformls", {
+	cmd = { vim.fn.stdpath("data") .. "/mason/bin/terraform-ls", "serve" },
 	pattern = { "*.tf", "*.tfvars", "*.tofu" },
 	filetypes = { "terraform" },
-}
+	root_markers = { ".terraform", ".git" },
+	on_new_config = function(config)
+		local base_capabilities = require("blink.cmp").get_lsp_capabilities()
 
-vim.lsp.enable("tflint")
--- vim.lsp.enable 'terraformls'
+		config.capabilities = {
+			general = base_capabilities.general or {},
+
+			textDocument = {
+				completion = base_capabilities.textDocument.completion or { dynamicRegistration = true },
+				references = base_capabilities.textDocument.references or { dynamicRegistration = true },
+				rename = base_capabilities.textDocument.rename or { dynamicRegistration = true, prepareSupport = true },
+
+				codeAction = base_capabilities.textDocument.codeAction or { dynamicRegistration = true },
+				codeLens = base_capabilities.textDocument.codeLens or { dynamicRegistration = true },
+				documentSymbol = base_capabilities.textDocument.documentSymbol or { dynamicRegistration = true },
+				documentHighlight = base_capabilities.textDocument.documentHighlight or { dynamicRegistration = true },
+				signatureHelp = base_capabilities.textDocument.signatureHelp or { dynamicRegistration = true },
+				typeDefinition = base_capabilities.textDocument.typeDefinition or { dynamicRegistration = true },
+				implementation = base_capabilities.textDocument.implementation or { dynamicRegistration = true },
+				publishDiagnostics = base_capabilities.textDocument.publishDiagnostics,
+			},
+
+			workspace = {
+				symbol = base_capabilities.workspace.symbol or { dynamicRegistration = true },
+				workspaceFolders = base_capabilities.workspace.workspaceFolders,
+				configuration = base_capabilities.workspace.configuration,
+			},
+		}
+	end,
+})
+vim.lsp.enable("terraformls")
+
+--NOTE: bash-language-server
+vim.lsp.enable("bashls")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
