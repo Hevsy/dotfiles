@@ -146,6 +146,7 @@ alias ll='la -la'
 alias ll='ls -l'
 alias pip="pyenv exec pip"
 alias python="python3"
+alias oc="opencode"
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(pyenv virtualenv-init -)"
