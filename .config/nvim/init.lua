@@ -1017,7 +1017,16 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
+  -- NOTE: PP - undotree
+  {
+    'jiaoshijie/undotree',
+    opts = {
+      -- your options
+    },
+    keys = { -- load the plugin only when using it's keybinding:
+      { '<leader>u', "<cmd>lua require('undotree').toggle()<cr>" },
+    },
+  },
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
