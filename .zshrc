@@ -122,7 +122,7 @@ alias k="kubectl"
 alias kn="kubens"
 alias kx="kubectx"
 alias update="sudo apt update && sudo apt upgrade -y&& brew update && brew upgrade"
-alias logmein='rm -f ~/.aws/credentials && aws sso login --sso-session rdc && ~/scripts/build_sso_creds_file.sh'
+alias logmein='aws sso login --sso-session rdc'
 alias od='onedrive_gui'
 alias tf='tofu'
 alias tfa='tofu apply'
@@ -148,6 +148,7 @@ alias pip="pyenv exec pip"
 alias python="python3"
 alias oc="opencode"
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
+alias rgr='rgrep --color'
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(pyenv virtualenv-init -)"
 
