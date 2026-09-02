@@ -1,0 +1,5 @@
+lazygit
+midnight-commander
+opencode
+pyenv
+spicetify-cli

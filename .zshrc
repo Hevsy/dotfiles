@@ -1,3 +1,5 @@
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -121,7 +123,7 @@ alias k9="k9s"
 alias k="kubectl"
 alias kn="kubens"
 alias kx="kubectx"
-alias update="sudo apt update && sudo apt upgrade -y&& brew update && brew upgrade"
+# alias update="sudo apt update && sudo apt upgrade -y&& brew update && brew upgrade"
 alias logmein='aws sso login --sso-session rdc'
 alias od='onedrive_gui'
 alias tf='tofu'
@@ -149,6 +151,8 @@ alias python="python3"
 alias oc="opencode"
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias rgr='rgrep --color'
+alias update='sudo dnf update --refresh -y && brew update && flatpak update -y'
+
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(pyenv virtualenv-init -)"
 
@@ -181,9 +185,13 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 eval "$(fzf --zsh)"
 
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  exec tmux new-session -A -s main
+  exec tmux -u new-session -A -s main
 fi
 export PATH="/home/linuxbrew/.linuxbrew/opt/mysql@8.0/bin:$PATH"
 export PATH="$PATH:/mnt/c/Windows/System32:/mnt/c/Windows\SysWOW64"
 
 complete -o nospace -C /home/sago/.tenv/OpenTofu/1.9.3/tofu tofu
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/sago/.local/bin:$PATH"
