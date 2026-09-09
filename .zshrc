@@ -154,7 +154,7 @@ alias rgr='rgrep --color'
 alias update='sudo dnf update --refresh -y && brew update && flatpak update -y'
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-eval "$(pyenv virtualenv-init -)"
+ # eval "$(pyenv virtualenv-init -)"
 
 export PATH="$HOME/Projects/delta-script:$PATH" 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -167,16 +167,16 @@ complete -C '/home/linuxbrew/.linuxbrew/bin/aws_completer' aws
 autoload -U +X bashcompinit && bashcompinit
 
 if [ -e /home/sago/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sago/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 #Deno
-export DENO_INSTALL="/home/paul-rdc/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
+# export DENO_INSTALL="/home/paul-rdc/.deno"
+# export PATH="$DENO_INSTALL/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
