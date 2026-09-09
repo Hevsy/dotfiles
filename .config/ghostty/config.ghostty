@@ -1,0 +1,8 @@
+font-size = 10
+theme = Galizur
+background-image = /home/sago/Pictures/Wallpapers/Resized/andrew-kliatskyi-PC01nb6VhM4-unsplash-1900.jpg
+background-image-opacity = 0.4
+background-image-fit = cover
+# background = black
+command = /home/linuxbrew/.linuxbrew/bin/zsh -l
+maximize = true
