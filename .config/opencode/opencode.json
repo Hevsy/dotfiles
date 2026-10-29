@@ -1,0 +1,38 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "build": {
+      "prompt": "{file:./prompts/build.txt}",
+      "temperature": 0.2
+    },
+    "plan": {
+      "prompt": "{file:./prompts/plan.txt}",
+      "temperature": 0.1
+    },
+    "title": {
+      "model": "amazon-bedrock/anthropic-claude-haiku-4.5"
+    }
+  },
+  "provider": {
+    "amazon-bedrock": {
+      "models": {
+        "anthropic-claude-haiku-4.5": {
+          "id": "arn:aws:bedrock:us-east-2:177462482396:application-inference-profile/ygjgyu8jm29d"
+        },
+        "anthropic-claude-sonnet-4.5": {
+          "id": "arn:aws:bedrock:us-east-2:177462482396:application-inference-profile/ai08kytq7jlw"
+        },
+        "anthropic-claude-sonnet-4.6": {
+          "id": "arn:aws:bedrock:us-east-2:177462482396:application-inference-profile/8h6cqcpmmt9j"
+        },
+        "anthropic-claude-sonnet-5": {
+          "id": "arn:aws:bedrock:us-east-2:177462482396:application-inference-profile/uw1hbuky5rzm"
+        }
+      },
+      "options": {
+        "profile": "bedrock_bedrock-paul.parinov",
+        "region": "us-east-2"
+      }
+    }
+  }
+}

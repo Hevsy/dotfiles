@@ -121,7 +121,12 @@ alias k9="k9s"
 alias k="kubectl"
 alias kn="kubens"
 alias kx="kubectx"
-alias update="sudo apt update && sudo apt upgrade -y&& brew update && brew upgrade"
+# dnf (Fedora dev container) vs apt (Ubuntu host) - same alias name, same dotfiles, different package manager underneath
+if command -v dnf &> /dev/null; then
+  alias update='sudo dnf update --refresh -y && brew update && brew upgrade'
+else
+  alias update='sudo apt update && sudo apt upgrade -y && brew update && brew upgrade && { command -v flatpak &> /dev/null && flatpak update -y; }'
+fi
 alias logmein='aws sso login --sso-session rdc'
 alias od='onedrive_gui'
 alias tf='tofu'
