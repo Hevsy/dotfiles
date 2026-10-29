@@ -93,7 +93,7 @@ set ignoreeof=3
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -144,34 +144,28 @@ alias rg='source ranger ranger'
 alias lg='lazygit'
 alias la='la -la'
 alias ll='ls -l'
-alias pip="pyenv exec pip"
 alias python="python3"
 alias oc="opencode"
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias rgr='rgrep --color'
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-eval "$(pyenv virtualenv-init -)"
+alias uvr='uv run'
+[ -x "$HOME/.homebrew/bin/brew" ] && eval "$("$HOME/.homebrew/bin/brew" shellenv)"
+command -v direnv &> /dev/null && eval "$(direnv hook zsh)"
 
 export PATH="$HOME/Projects/delta-script:$PATH" 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 #aws autocomplete
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
-complete -C '/home/linuxbrew/.linuxbrew/bin/aws_completer' aws
+command -v aws_completer &> /dev/null && complete -C "$(command -v aws_completer)" aws
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 autoload -U +X bashcompinit && bashcompinit
 
 if [ -e /home/sago/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sago/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
 
 #Deno
-export DENO_INSTALL="/home/paul-rdc/.deno"
+export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -183,7 +177,6 @@ eval "$(fzf --zsh)"
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   exec tmux new-session -A -s main
 fi
-export PATH="/home/linuxbrew/.linuxbrew/opt/mysql@8.0/bin:$PATH"
-export PATH="$PATH:/mnt/c/Windows/System32:/mnt/c/Windows\SysWOW64"
+command -v tofu &> /dev/null && complete -o nospace -C "$(command -v tofu)" tofu
 
-complete -o nospace -C /home/sago/.tenv/OpenTofu/1.9.3/tofu tofu
+export PATH="$PATH:$HOME/.upwindctl/env"

@@ -1,0 +1,17 @@
+# Minimal Ubuntu host package list.
+#
+# The host exists mainly to run distrobox + the shared Homebrew install
+# (~/.homebrew, see ../Brewfile and MIGRATION.md) - almost nothing else
+# lives directly on the host. Ghostty is installed separately by
+# bootstrap-host.sh since the method depends on the Ubuntu version.
+
+podman
+podman-docker
+distrobox
+flatpak
+build-essential
+procps
+curl
+file
+git
+fonts-firacode

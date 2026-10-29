@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Entry point for the Ghostty "work" terminal profile - drops straight into
+# the dev distrobox instead of a bare host shell. Point Ghostty's `command`
+# config at this instead of hardcoding `distrobox enter dev` directly, so
+# the terminal config stays decoupled from distrobox details.
+exec distrobox enter dev
