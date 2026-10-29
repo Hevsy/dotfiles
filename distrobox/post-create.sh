@@ -29,6 +29,13 @@ fi
 echo "==> krew plugins"
 PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" kubectl krew install neat ctx ns
 
+echo "==> Bootstrapping Neovim plugins + Mason (LSPs/linters/DAPs)"
+# Mason installs OS/arch-specific binaries under ~/.local/share/nvim/mason -
+# never portable across machines, so always force a clean headless bootstrap
+# here instead of trusting anything carried over from a backup/restore. See
+# MIGRATION.md for why ~/.local/share/nvim is excluded from the backup tarball.
+nvim --headless "+Lazy! sync" "+MasonToolsUpdate" +qa || true
+
 cat <<'EOF'
 
 Done. Still TODO manually:

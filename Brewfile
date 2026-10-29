@@ -21,6 +21,9 @@ brew "tree"
 brew "direnv"
 
 # --- editor (neovim is primary editor - config in .config/nvim) ---
+# known-good: v0.11.6 (WSL, Oct 2026) - LSPs/linters confirmed working against
+# this version + the pinned .config/nvim/lazy-lock.json. If an upgrade breaks
+# LSPs/linters, see MIGRATION.md for how to reinstall this exact version.
 brew "neovim"
 
 # --- vcs ---

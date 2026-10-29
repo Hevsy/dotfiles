@@ -2,11 +2,42 @@
 
 ## Pre-flight check
 
-Before committing to Ubuntu 26.04 on the host, confirm JumpCloud, Akamai
-Guardicore, and Rapid7 agents support it. If any lag behind, fall back to
-24.04 LTS - nothing else in this plan changes, only the Ghostty install
-path (see below) switches from the native apt package to the community
-installer.
+Endpoint agent compatibility, checked against each vendor's docs:
+
+| Agent | Ubuntu 26.04 | Notes |
+|---|---|---|
+| JumpCloud | ✅ | Supported since the Apr 2026 agent release. |
+| Rapid7 Insight Agent | ✅ | Requires agent ≥ 4.1.2. |
+| Akamai Guardicore Platform Agent | ❌ | Latest docs (v7.4.0-v7.5.0) only list 22.04/24.04, scoped to "running GNOME desktop environment". |
+
+Guardicore is the blocker. Options, in order of preference:
+1. **Fall back to 24.04 LTS** for the host. Zero ambiguity, all three agents
+   natively supported. Nothing else in this plan changes - only the Ghostty
+   install path (see below) switches from the native apt package to the
+   community installer.
+2. **26.04 + a dedicated "compliance" distrobox** running Guardicore inside
+   an Ubuntu 24.04 toolbox, same trick NixOS users already use for agents
+   that don't support their host OS. Distrobox shares the host's PID/net
+   namespaces by default (no `--unshare-process`/`--unshare-netns`), so an
+   agent inside the container still observes real host activity - it's not
+   meaningfully sandboxed away the way a normal container would be.
+   Caveats before relying on this:
+   - The agent reports "Ubuntu 24.04" to the management console, not the
+     true host OS - a visible mismatch if device inventory is ever audited.
+   - Guardicore specifically does network *enforcement* (netfilter/iptables
+     rules), not just monitoring, which typically needs real privileges
+     (`NET_ADMIN`-equivalent) a rootless container doesn't have by default -
+     no confirmed precedent found for this working with Guardicore
+     specifically (only CrowdStrike/Kolide discussions turned up).
+   - Rootless distrobox containers don't auto-survive reboots as a running
+     service; needs a host-level systemd user unit to start the compliance
+     container (and the agent inside it) on boot/login.
+   - "Runs" isn't "approved" - confirm with whoever owns the agent policy
+     before relying on this for anything that matters.
+3. Check whether Guardicore is even still mandated on this specific device -
+   personal/dev laptop policy sometimes differs from the managed fleet.
+
+Confirm with IT/security before finalizing the host OS version.
 
 ## Strategy
 
@@ -65,12 +96,21 @@ dotfiles/
   Brewfile              # shared CLI tool list - see above
   .gitconfig            # credential helper now uses `gh` from PATH, not a
                          # hardcoded /home/linuxbrew/... path
+  .gitignore            # excludes .viminfo and the opencode plugin-dev sandbox - see below
   .ssh/config           # host aliases only - keys are NOT in this repo
   .p10k.zsh
   .tofurc
   .selected_editor
+  .tmux.conf            # catppuccin v2 syntax (see Neovim/tmux reproducibility below)
   .local/bin/dev-shell   # Ghostty's "command" target - drops into the dev container
   .zshrc / .bashrc      # WSL-specific hardcoded paths removed/guarded (see below)
+  .config/
+    nvim/
+      lazy-lock.json     # plugin version lockfile - see below
+    ghostty/config.ghostty   # prepped now, inert until there's a Ghostty to read it
+    opencode/opencode.json, prompts/*.txt   # settings + custom build/plan prompts
+    mc/ini, mc/tokyo-night-16M.ini          # prepped now, inert on this box (brew mc not installed yet)
+  .local/share/mc/skins/tokyo-night-16M.ini  # actual skin lookup path mc reads from
   distrobox/
     distrobox.ini         # container definition (podman socket share, OS packages)
     packages-dnf.txt       # minimal dnf bootstrap list (homebrew deps + podman client)
@@ -108,12 +148,84 @@ Not changed, but worth a look when you're settled in:
   ripgrep. Probably intentional, but worth confirming.
 - `alias od='onedrive_gui'` - only relevant if you still use an OneDrive
   sync client on Linux.
-- `alias update="sudo apt update && sudo apt upgrade -y && brew update && brew upgrade"`
-  is host-centric (apt); inside the container you'd want the dnf
-  equivalent - not changed since it's a minor convenience alias, not a
-  correctness issue.
 
-## Terminal setup
+Also fixed since the first draft of this doc:
+- `alias update=...` is now OS-aware (`dnf` in the Fedora container, `apt` +
+  optional `flatpak update` on the Ubuntu host) instead of hardcoded to
+  `apt` - same alias name, same `.zshrc`, correct command in both places.
+- `.viminfo` had been tracked in this repo since its very first commit -
+  that's Vim's cache/history file, not config; grows forever and is
+  machine/session-specific. Removed from git, added to the new
+  `.gitignore` alongside the `~/.config/opencode` plugin-dev sandbox
+  (`node_modules/`, lockfiles - reinstallable, not config).
+
+## Neovim & tmux reproducibility
+
+Lesson learned from the `dell` branch (Bazzite laptop migration, done earlier
+using an older copy of these dotfiles): installing "the latest" tmux there
+pulled a fresh catppuccin/tmux plugin update alongside it, and that plugin's
+v2 API rewrite broke the whole status line. Separately, most Neovim
+LSPs/linters failed to start after that migration and were never fixed.
+Root causes and the fixes applied here so this migration doesn't repeat them:
+
+- **`.tmux.conf`** now uses catppuccin's v2 syntax (`@catppuccin_flavor`,
+  explicit `@catppuccin_window_status_style`, `status-left`/`status-right`
+  assembled from `#{E:@catppuccin_status_...}` tokens) - ported from `dell`,
+  with `tmux-sessionx` re-added (dropped there, kept here) and the shell path
+  fixed to the shared `~/.homebrew/bin/zsh`.
+- **`.config/nvim/lazy-lock.json`** (lazy.nvim's plugin lockfile, pins every
+  plugin to an exact commit) is now committed for the first time - using
+  **this WSL box's actual lockfile**, not `dell`'s. Diffed the two: every
+  single plugin commit differs, and `dell`'s is the lockfile from the
+  machine where LSPs/linters never started - i.e. it's the known-*broken*
+  state, not a fix. Pinning this box's working versions means a fresh
+  `:Lazy sync` on the new machine reproduces what's actually working today,
+  instead of grabbing latest HEAD of 30+ plugins (the same category of
+  problem that broke tmux above).
+- **Mason** (LSP/linter/DAP installer) installs OS/arch-specific compiled
+  binaries under `~/.local/share/nvim/mason/` - never portable across a
+  WSL->Fedora-distrobox (or Ubuntu->Bazzite) move. This is the suspected real
+  cause of `dell`'s LSP/linter failures: an old backup likely carried over
+  wrong-arch/wrong-glibc binaries that Neovim found but couldn't execute.
+  Fix: `~/.local/share/nvim` and `~/.local/state/nvim` are **excluded from
+  the backup tarball** (see below) and `distrobox/post-create.sh` runs a
+  forced headless bootstrap (`:Lazy! sync` + `:MasonToolsUpdate`) so
+  LSPs/linters are confirmed working *before* Neovim is ever opened
+  interactively.
+- **Neovim version**: known-good is `v0.11.6` (this WSL box, confirmed
+  working against the pinned lockfile above). The `Brewfile` installs
+  neovim unpinned for simplicity - if a future `brew upgrade` breaks
+  LSPs/linters, the exact old version can be reinstalled via Homebrew's
+  historical-formula trick:
+  `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/<old-commit>/Formula/n/neovim.rb`
+  (find `<old-commit>` by searching `homebrew-core`'s git log for the
+  `neovim` formula around the date it was last known to work).
+
+## Stow gotchas (learned the hard way)
+
+- **Apps rewriting config files in place.** On `dell`, `.config/ghostty` and
+  `.local/share/mc` both started as stow symlinks and silently ended up as
+  real files - some app rewrote its config file directly instead of
+  following the symlink through to the git-tracked target, breaking the
+  link. Periodically run `find ~/dotfiles -type f` and check nothing that
+  should be a symlink has turned into a real file after an app update;
+  re-stow if so.
+- **Absolute vs. relative symlinks.** `stow` refuses to manage (and aborts
+  the *entire* operation for) any existing symlink it didn't create itself -
+  including ones that already point to the right place, if they're absolute
+  paths instead of the relative paths `stow` generates (e.g. a manually
+  created `~/.config/nvim/init.lua -> /home/sago/dotfiles/...` instead of
+  `-> ../../dotfiles/...`). Fix: delete the offending symlink(s) and let
+  `stow` recreate them - it'll then "own" them correctly.
+- **Never re-stow while using a tool that reads its own live config.** Found
+  out the hard way mid-migration-prep: this dotfiles work was done *inside
+  opencode itself*, which reads `~/.config/opencode/opencode.json` live.
+  Deleting that file to prepare for stow broke the running session
+  immediately. If a tool's own config is being stowed, do that step from a
+  *different* shell/tool than the one being reconfigured, or expect to
+  need a manual restore mid-way.
+
+
 
 - **Host maintenance console**: the distro's stock terminal app. Zero
   setup, used rarely (podman/distrobox issues, host package upgrades). It
@@ -247,4 +359,8 @@ home mount.
 - `*.bak`, `*.old`, `known_hosts.bak`, `known_hosts.old`
 - `.kube/cache`, `.aws/sso/cache`, `.aws/cli/cache`
 - `.vscode-server`, `.vscode-remote-containers` (WSL Remote-* artifacts, N/A natively)
+- `~/.local/share/nvim`, `~/.local/state/nvim` - Mason's compiled LSP/linter/
+  DAP binaries live here, OS/arch-specific and never portable (see Neovim &
+  tmux reproducibility above). `post-create.sh` rebuilds this from scratch.
+- `.viminfo` - cache/history, now gitignored too (see above)
 - build artifacts, e.g. `efs-utils/src/proxy/target`

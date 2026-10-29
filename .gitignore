@@ -1,0 +1,8 @@
+# Vim/Neovim cache/history, not config - regenerates itself, grows forever,
+# and is machine/session-specific (was mistakenly tracked since the first commit).
+.viminfo
+
+# opencode plugin-dev sandbox under .config/opencode - reinstallable, not config.
+.config/opencode/node_modules/
+.config/opencode/package-lock.json
+.config/opencode/bun.lock
