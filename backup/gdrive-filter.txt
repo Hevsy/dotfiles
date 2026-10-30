@@ -1,0 +1,36 @@
+# rclone filter rules for gdrive-backup.sh.
+#
+# rclone evaluates rules top-to-bottom and stops at the first match, so
+# specific excludes must come BEFORE the broader "+" includes below them -
+# otherwise a path would already match the broad include and never reach
+# the more specific exclude further down.
+#
+# Same allowlist approach as the one-time MIGRATION.md backup tarball:
+# default-deny everything (final "- *"), only sync named top-level dirs.
+# Anything app-state/config-ish (.config, .local, .cache, .ssh, .aws, etc)
+# is simply never listed, so it's never touched - no exclude-list upkeep
+# every time some tool adds a new dotdir.
+
+# --- specific excludes (must precede the includes they override) ---
+- /Projects/RDC_TF/wb-i1-legacy/_old/**
+- /efs-utils/src/proxy/target/**
+- .cache/**
+- *.zcompdump*
+
+# --- standard XDG dirs (where the copied-over Windows Documents/Pictures/etc land) ---
++ /Documents/**
++ /Pictures/**
++ /Downloads/**
++ /Desktop/**
++ /Videos/**
++ /Music/**
+
+# --- real project/data dirs ---
++ /Projects/**
++ /medusa/**
++ /efs-utils/**
++ /scripts/**
++ /bin/**
+
+# --- default deny everything else (dotfiles-managed config, app state, caches) ---
+- *

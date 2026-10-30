@@ -111,6 +111,11 @@ dotfiles/
     opencode/opencode.json, prompts/*.txt   # settings + custom build/plan prompts
     mc/ini, mc/tokyo-night-16M.ini          # prepped now, inert on this box (brew mc not installed yet)
   .local/share/mc/skins/tokyo-night-16M.ini  # actual skin lookup path mc reads from
+  .config/systemd/user/
+    gdrive-backup.service, gdrive-backup.timer  # see Google Drive backup below
+  backup/
+    gdrive-backup.sh       # NOT stowed - run via its repo path, like Brewfile/distrobox
+    gdrive-filter.txt       # rclone allowlist - see Google Drive backup below
   distrobox/
     distrobox.ini         # container definition (podman socket share, OS packages)
     packages-dnf.txt       # minimal dnf bootstrap list (homebrew deps + podman client)
@@ -264,6 +269,52 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
   independently on the host and inside the container (separate process
   namespaces) - two unrelated "main" sessions, one per environment.
   Expected, not a bug.
+
+## Google Drive secondary backup
+
+A second, ongoing safety net on top of the one-time migration tarball below
+- `Documents`/`Pictures`/`Downloads`/etc (where the copied-over Windows
+files land) plus `Projects`/`medusa`/`efs-utils`/`scripts`/`bin` get mirrored
+to Google Drive continuously, host-only (not run inside the container).
+
+Why `rclone` instead of a GUI client: Google doesn't ship a native Linux
+Drive app. The only real GUI option (Insync) is paid; `rclone` is free,
+scriptable, and fits the rest of this repo's "explicit and curated, not a
+black box" approach.
+
+- **Allowlist, not denylist.** `backup/gdrive-filter.txt` lists exactly
+  which top-level dirs get synced - same approach as the one-time backup
+  tarball below, for the same reason: app-state/config dotdirs
+  (`.config`, `.local`, `.cache`, `.ssh`, `.aws`, ...) multiply over time as
+  new tools get installed, so a denylist needs constant upkeep to stay
+  complete. An allowlist just... doesn't include them, ever, with zero
+  maintenance.
+- **`rclone sync`, not `copy`** - a true mirror. Deleting a file locally
+  deletes it from Drive on the next run too (same behavior Windows's Drive
+  client has). Chosen deliberately over the safer `copy` (which only ever
+  adds/updates, never deletes remotely) - if that tradeoff turns out to be
+  the wrong call in practice, swap `sync` for `copy` in
+  `backup/gdrive-backup.sh`.
+- **Not stowed.** `backup/gdrive-backup.sh` and `gdrive-filter.txt` are
+  referenced by their repo path directly (`~/dotfiles/backup/...`), same
+  pattern as `Brewfile`/`distrobox/*` - no need for them to live at a
+  specific `$HOME` path. The systemd units *do* need to be stowed (systemd
+  only looks in `~/.config/systemd/user/`), so those live under `.config/`
+  as usual.
+- **Every 30 minutes**, via `gdrive-backup.timer` (systemd user timer) - not
+  continuous/real-time. A fixed-interval full-tree scan+compare every
+  minute would be wasteful (CPU/disk, and repeated Drive API listing calls
+  risk quota throttling as Projects/media grow) for what's a secondary
+  safety-net backup, not live collaboration. 30 min means "lose at most
+  that much" if the disk dies - a fine bar for this.
+- **One-time setup, not scripted**: `rclone config` needs an interactive
+  browser for Google's OAuth flow, so it can't be automated blind. Create
+  a remote named exactly `gdrive` (type: Google Drive). `rclone.conf` (the
+  resulting token) lives at `~/.config/rclone/rclone.conf` - **never**
+  committed (gitignored defensively even though nothing in this repo stows
+  into that path, so there's no real exposure risk today).
+  `bootstrap-host.sh` checks for the `gdrive:` remote and enables the timer
+  automatically if found, otherwise prints the one-time setup steps.
 
 ## Step-by-step
 

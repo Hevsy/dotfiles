@@ -1,0 +1,8 @@
+[Unit]
+Description=Sync Documents/Pictures/Projects/etc to Google Drive (secondary backup)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/dotfiles/backup/gdrive-backup.sh

@@ -6,3 +6,9 @@
 .config/opencode/node_modules/
 .config/opencode/package-lock.json
 .config/opencode/bun.lock
+
+# rclone's config holds the Google OAuth token - never committed, even
+# defensively, since this repo's layout doesn't stow anything under
+# .config/rclone (see backup/gdrive-backup.sh for why).
+.config/rclone/
+rclone.conf

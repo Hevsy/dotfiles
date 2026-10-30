@@ -47,6 +47,20 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
+echo "==> Google Drive secondary backup (rclone)"
+if "$HOME/.homebrew/bin/rclone" listremotes 2>/dev/null | grep -q '^gdrive:'; then
+  systemctl --user enable --now gdrive-backup.timer
+else
+  cat <<'EOF'
+No 'gdrive' rclone remote configured yet - this needs an interactive
+browser for Google's OAuth flow, so it's not scripted. Once done, enable
+the timer:
+  rclone config          # create a remote named exactly "gdrive" (Google Drive)
+  systemctl --user enable --now gdrive-backup.timer
+See ~/dotfiles/backup/gdrive-backup.sh and MIGRATION.md for details.
+EOF
+fi
+
 export HOST_UID
 HOST_UID="$(id -u)"
 

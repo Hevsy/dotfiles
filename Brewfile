@@ -53,3 +53,6 @@ brew "ncdu"
 brew "mc"
 brew "ranger"
 brew "opencode"
+
+# --- backup (host only - see backup/gdrive-backup.sh and MIGRATION.md) ---
+brew "rclone"
