@@ -259,7 +259,9 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
    found to be loose collections of repos, not single ones; check each
    subfolder individually before wiping anything:
    `Projects/` (contains many independent repos, e.g. `artifacts_*`, `opscli`),
-   `devops-book-pp-code/`, `ODIN/`, `workfx-zbi4-backup/`.
+   `medusa/`.
+   (`devops-book-pp-code/`, `ODIN/`, `workfx-zbi4-backup/` were old learning
+   exercises - already deleted, not carried forward.)
 3. Build the secrets bundle (encrypt it - see below):
    - `~/.ssh/` - keep only live keys: `id_ed25519*`, `pp_rdc*`, `sg-rdc-ed25519*`
      (not `-v2`/`-old`/`.bak` unless still in use), `jenkins.pem`,
@@ -277,9 +279,12 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
        --exclude='*.zcompdump*' --exclude='*_history' \
        --exclude='.kube/cache' --exclude='.aws/sso/cache' --exclude='.aws/cli/cache' \
        --exclude='efs-utils/src/proxy/target' \
-       -czf ~/home-backup.tar.gz -C ~ Projects devops-book devops-book-pp-code \
-       medusa ODIN efs-utils go scripts tmp workfx-zbi4-backup
+       -czf ~/home-backup.tar.gz -C ~ Projects medusa efs-utils scripts bin
    ```
+   Deliberately not included: `go/` (contents are just `~/go/pkg/mod`, Go's
+   module download cache - 963MB, fully reinstallable via `go mod download`,
+   not worth backing up) and `tmp/` (scratch space - a leftover test tmux
+   plugin clone and a non-sensitive OIDC URL, nothing of value found).
 5. Copy `secrets.tar.gz.gpg` and `home-backup.tar.gz` off-box (external
    drive / cloud storage you control - not into the dotfiles git repo).
 
