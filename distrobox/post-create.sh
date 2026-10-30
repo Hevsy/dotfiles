@@ -11,7 +11,13 @@ set -euo pipefail
 
 echo "==> Stowing dotfiles"
 cd ~/dotfiles
-stow -t ~ .
+# --adopt lets stow claim real files that dnf/brew/distrobox already created
+# at these paths instead of erroring out on every conflict (overwrites the
+# repo's tracked content with the real file's content to do so); the
+# `git checkout` right after discards that and restores the curated version
+# - net effect: every target becomes a symlink, with OUR content.
+stow --adopt -t ~ .
+git checkout -- .
 
 echo "==> Installing Homebrew to ~/.homebrew if not already present (shared with the host)"
 if [ ! -d "$HOME/.homebrew" ]; then

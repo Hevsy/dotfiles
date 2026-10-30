@@ -203,13 +203,28 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
 
 ## Stow gotchas (learned the hard way)
 
-- **Apps rewriting config files in place.** On `dell`, `.config/ghostty` and
-  `.local/share/mc` both started as stow symlinks and silently ended up as
-  real files - some app rewrote its config file directly instead of
-  following the symlink through to the git-tracked target, breaking the
-  link. Periodically run `find ~/dotfiles -type f` and check nothing that
-  should be a symlink has turned into a real file after an app update;
-  re-stow if so.
+- **Installing packages before stowing, on a fresh machine.** `bootstrap-host.sh`/
+  `post-create.sh` install packages (apt/flatpak/Ghostty/Homebrew/dnf) *before*
+  stowing. Several of those create their own default config file at the same
+  path stow wants to symlink (Ghostty's config dir, possibly others) - plain
+  `stow` then refuses every one of those as a conflict and aborts entirely,
+  which is exactly what happened on `dell`. Fix (already applied in both
+  scripts): `stow --adopt -t ~ .` followed immediately by `git checkout -- .`.
+  `--adopt` claims the real file instead of erroring, but it does so by
+  **overwriting the repo's tracked content with whatever the installer's
+  default file contained** - the `git checkout` right after discards that and
+  restores the curated dotfiles version. Net effect: every target ends up a
+  symlink, with our content, not the installer's defaults. Worth running
+  `git status` between the two commands once, just to see what actually got
+  adopted/overwritten before discarding it.
+- **Apps rewriting config files in place, after initial setup.** On `dell`,
+  `.config/ghostty` and `.local/share/mc` both started as stow symlinks and
+  silently ended up as real files later - some app rewrote its config file
+  directly instead of following the symlink through to the git-tracked
+  target, breaking the link. Same root cause and same fix as above, just
+  needed periodically rather than once: `cd ~/dotfiles && stow --adopt -t ~ .
+  && git checkout -- .`, or just watch for it via `find ~/dotfiles -type f`
+  (should never show a file that's supposed to be a symlink turning real).
 - **Absolute vs. relative symlinks.** `stow` refuses to manage (and aborts
   the *entire* operation for) any existing symlink it didn't create itself -
   including ones that already point to the right place, if they're absolute

@@ -34,7 +34,12 @@ eval "$("$HOME/.homebrew/bin/brew" shellenv)"
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
 echo "==> Stowing dotfiles on the host"
-(cd "$DOTFILES_DIR" && stow -t ~ .)
+# --adopt lets stow claim real files that installers above already created
+# (Ghostty, Homebrew, etc.) instead of erroring out on every conflict; it
+# does so by overwriting the repo's tracked content with whatever that real
+# file contained, so `git checkout` immediately after restores the curated
+# version - net effect: every target becomes a symlink, with OUR content.
+(cd "$DOTFILES_DIR" && stow --adopt -t ~ . && git checkout -- .)
 
 echo "==> Installing oh-my-zsh on the host (unattended, keeps existing .zshrc)"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
