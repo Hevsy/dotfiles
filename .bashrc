@@ -14,6 +14,9 @@ export PATH
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
+# Mason-installed LSP servers / linters / formatters (required by vim.lsp.enable)
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+
 # User specific aliases and functions
 if [ -d ~/.bashrc.d ]; then
     for rc in ~/.bashrc.d/*; do

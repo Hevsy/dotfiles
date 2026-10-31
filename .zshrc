@@ -86,8 +86,13 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="$HOME/scripts:$PATH"
-export PATH=$PATH:/usr/local/go/bin
+# bazzite: removed (WSL) - ~/scripts does not exist here
+# export PATH="$HOME/scripts:$PATH"
+# bazzite: removed (WSL) - /usr/local/go not installed here
+# export PATH=$PATH:/usr/local/go/bin
+
+# Mason-installed LSP servers / linters / formatters (required by vim.lsp.enable)
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 export AWS_PROFILE="default"
 export AWS_REGION="ap-southeast-2"
 set -o ignoreeof
@@ -156,8 +161,10 @@ alias update='sudo dnf update --refresh -y && brew update && flatpak update -y'
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
  # eval "$(pyenv virtualenv-init -)"
 
-export PATH="$HOME/Projects/delta-script:$PATH" 
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+# bazzite: removed (WSL) - ~/Projects/delta-script does not exist here
+# export PATH="$HOME/Projects/delta-script:$PATH"
+# bazzite: removed (WSL) - krew not installed here (~/.krew missing)
+# export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 #aws autocomplete
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
@@ -188,10 +195,13 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
   exec tmux -u new-session -A -s main
 fi
 export PATH="/home/linuxbrew/.linuxbrew/opt/mysql@8.0/bin:$PATH"
-export PATH="$PATH:/mnt/c/Windows/System32:/mnt/c/Windows\SysWOW64"
 
-complete -o nospace -C /home/sago/.tenv/OpenTofu/1.9.3/tofu tofu
+# bazzite: removed (WSL) - /mnt/c paths don't exist outside WSL
+# export PATH="$PATH:/mnt/c/Windows/System32:/mnt/c/Windows\SysWOW64"
+
+# bazzite: removed (WSL) - tenv not installed here (~/.tenv missing), breaks this line on source otherwise it only slows startup
+# complete -o nospace -C /home/sago/.tenv/OpenTofu/1.9.3/tofu tofu
 
 
-# Added by Antigravity CLI installer
-export PATH="/home/sago/.local/bin:$PATH"
+# Added by Antigravity CLI installer (WSL) - duplicate of the $HOME/.local/bin entry at the top
+# export PATH="/home/sago/.local/bin:$PATH"
