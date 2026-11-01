@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "liftosaur": {
+        "type": "remote",
+        "url": "https://www.liftosaur.com/mcp"
+      }
+    }
+  },
+  "permissions": [
+    { "action": "liftosaur_*", "resource": "*", "effect": "deny" },
+    { "action": "liftosaur_get_liftoscript_reference", "resource": "*", "effect": "allow" },
+    { "action": "liftosaur_get_liftoscript_examples", "resource": "*", "effect": "allow" },
+    { "action": "liftosaur_get_program_design_guide", "resource": "*", "effect": "allow" },
+    { "action": "liftosaur_get_liftohistory_reference", "resource": "*", "effect": "allow" },
+    { "action": "liftosaur_list_exercises", "resource": "*", "effect": "allow" },
+    { "action": "liftosaur_list_builtin_programs", "resource": "*", "effect": "allow" },
+    { "action": "liftosaur_get_builtin_program", "resource": "*", "effect": "allow" }
+  ]
+}
