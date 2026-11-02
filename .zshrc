@@ -83,7 +83,6 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="$HOME/scripts:$PATH"
 export PATH=$PATH:/usr/local/go/bin
 export AWS_PROFILE="default"
 export AWS_REGION="ap-southeast-2"
@@ -126,7 +125,6 @@ else
   alias update='sudo apt update && sudo apt upgrade -y && brew update && brew upgrade && { command -v flatpak &> /dev/null && flatpak update -y; }'
 fi
 alias logmein='aws sso login --sso-session rdc'
-alias od='onedrive_gui'
 alias tf='tofu'
 alias tfa='tofu apply'
 alias tfp='tofu plan'
@@ -186,5 +184,3 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
   exec tmux new-session -A -s main
 fi
 command -v tofu &> /dev/null && complete -o nospace -C "$(command -v tofu)" tofu
-
-export PATH="$PATH:$HOME/.upwindctl/env"

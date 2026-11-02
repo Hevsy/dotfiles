@@ -100,7 +100,7 @@ Rules that keep it that way:
 dotfiles/
   Brewfile              # full dev-container CLI tool list - see above
   Brewfile.host         # minimal host maintenance tool list - see above
-  .stow-local-ignore    # keeps non-stowed files/opencode config out of $HOME
+  .stow-local-ignore    # keeps non-stowed files and opencode service.json out of $HOME
   .gitconfig            # credential helper now uses `gh` from PATH, not a
                          # hardcoded /home/linuxbrew/... path
   .gitignore            # excludes .viminfo, zcompdump, opencode service.json - see below
@@ -157,9 +157,14 @@ WSL/old-host-specific breakage found and fixed in `.zshrc`/`.bashrc`:
 Not changed, but worth a look when you're settled in:
 - `.zshrc` aliases `rg='source ranger ranger'` - this shadows ripgrep's `rg`
   with the `ranger` file manager; `rgr` is the alias that actually runs
-  ripgrep. Probably intentional, but worth confirming.
-- `alias od='onedrive_gui'` - only relevant if you still use an OneDrive
-  sync client on Linux.
+  ripgrep. That's intentional (`source ranger ranger` is ranger's own
+  polyglot wrapper, which cds to the last directory on exit), but worth
+  remembering when you want ripgrep.
+
+The OneDrive/Upwind/Azure leftovers from the old Microsoft-stack / BYO-laptop
+era are gone: `od`/`onedrive_gui`, `~/.upwindctl/env`, and the `.azure`
+symlink had no purpose on the Google-stack laptop. Recreate the Upwind agent
+inside the container if it's ever needed again.
 
 Also fixed since the first draft of this doc:
 - `alias update=...` is now OS-aware (`dnf` in the Fedora container, `apt` +
@@ -240,9 +245,11 @@ Things the first pass got wrong, now fixed in the scripts above:
   declared as `@plugin` (cloned, never sourced) - so the status line was
   empty. All three are handled by `bootstrap-host.sh` and `.tmux.conf`.
 - **opencode rewrites its own config in place**, replacing the stow symlink
-  with a real file. That's why `~/.config/opencode` is excluded from stow in
-  `.stow-local-ignore`; stow it from a plain TTY only when no opencode
-  session is running, then remove the exclusion.
+  with a real file. It is stowed now, but only re-adopt it from a plain TTY
+  with no opencode session running (`stow --no-folding --adopt -t ~ .`, then
+  review and commit - do *not* `git checkout` if the live file has the newer
+  config). Its machine-local `service.json` is excluded in
+  `.stow-local-ignore` and gitignored, so it always stays a real file.
 
 ## Stow gotchas (learned the hard way)
 
@@ -263,9 +270,10 @@ Things the first pass got wrong, now fixed in the scripts above:
   adopted/overwritten before discarding it.
 - **Folding defeats nested `.stow-local-ignore` rules.** If stow can fold a
   whole directory into one symlink, it does so without consulting ignore
-  rules for children - so excluding `.config/opencode` silently did nothing
-  until `--no-folding` was added. Both scripts use `--no-folding` now; it
-  costs more individual symlinks but makes per-path exclusions reliable.
+  rules for children - so a nested exclusion (e.g. `service.json` inside
+  `.config/opencode`) silently did nothing until `--no-folding` was added.
+  Both scripts use `--no-folding` now; it costs more individual symlinks but
+  makes per-path exclusions reliable.
 - **A `.stow-local-ignore` replaces stow's built-in ignore list.** `.git`,
   `.gitignore` and the ignore file itself have to be re-listed explicitly or
   `~/.git` becomes a symlink into the repo.
@@ -440,8 +448,6 @@ tar xzf ~/home-backup.tar.gz -C ~
 
 These broke on the move from WSL and need to be redone rather than restored:
 
-- **`.azure`** was a symlink to `/mnt/c/Users/.../.azure` (Windows) - gone.
-  Just `az login` again; a real `~/.azure` will be created.
 - **`.kube/config`** - don't copy the cached config; regenerate per cluster:
   `aws eks update-kubeconfig --name <cluster> --region <region> --profile <profile>`
   (there are ~18 cluster contexts on the old box - script this if it's a lot).

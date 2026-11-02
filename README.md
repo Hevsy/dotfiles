@@ -7,10 +7,9 @@ cd ~/dotfiles/distrobox
 ```
 
 Host-only after that: `cd ~/dotfiles && stow --no-folding -t ~ .` if you ever
-want to re-link manually. `--no-folding` is required so per-directory
-exclusions in `.stow-local-ignore` (notably `.config/opencode`) are applied
-instead of a whole directory being symlinked. Host tools come from
-`Brewfile.host`.
+want to re-link manually. `--no-folding` is required so per-path exclusions in `.stow-local-ignore`
+(notably opencode's machine-local `service.json`) are applied instead of a
+whole directory being symlinked. Host tools come from `Brewfile.host`.
 
 Then create/finish the dev container:
 

@@ -16,3 +16,8 @@
 # .config/rclone (see backup/gdrive-backup.sh for why).
 .config/rclone/
 rclone.conf
+
+# vim/nvim swap and backup files
+.*.sw[po]
+*.sw[po]
+*~

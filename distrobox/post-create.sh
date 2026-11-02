@@ -75,7 +75,6 @@ cat <<'EOF'
 Done. Still TODO manually:
   - chsh -s "$(command -v zsh)"          (set zsh as the container's default shell)
   - aws sso login --sso-session rdc      (re-auth, don't copy cached SSO tokens)
-  - az login                             (the old .azure WSL symlink is gone)
   - aws eks update-kubeconfig --name ... (regenerate kube contexts per cluster)
   - point ~/.docker/config.json credsStore at ecr-login (docker-credential-helper-ecr,
     installed via Brewfile, provides docker-credential-ecr-login) instead of desktop.exe

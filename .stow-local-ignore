@@ -16,8 +16,6 @@
 # Path patterns (anything with a slash) are matched against the full path;
 # segment patterns (no slash) against the basename at any depth.
 ^init\.lua_bck$
-
-# opencode reads its config live - stowing/adopting it from inside a running
-# session breaks it (observed). Remove this line and run `stow -t ~ .` from a
-# plain TTY once opencode is not running.
-^opencode$
+# opencode's machine-local service password: keep it as a real file, never a
+# symlink into the repo (it's also gitignored).
+^service\.json$
