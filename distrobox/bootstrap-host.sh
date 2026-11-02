@@ -123,7 +123,7 @@ echo "==> Assembling the dev container"
 if distrobox list 2>/dev/null | awk -F'|' '{gsub(/ /,"",$2); print $2}' | grep -qx dev; then
   echo "container 'dev' already exists - skipping assemble"
 else
-  distrobox assemble create -f "$SCRIPT_DIR/distrobox.ini"
+  distrobox assemble create --file "$SCRIPT_DIR/distrobox.ini"
 fi
 
 cat <<EOF
