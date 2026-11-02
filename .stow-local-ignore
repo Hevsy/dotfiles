@@ -1,0 +1,23 @@
+# Stow exclusions for this repo.
+#
+# These are referenced by their repo path rather than stowed into $HOME (see
+# MIGRATION.md), so keep them out of the $HOME symlink farm.
+^Brewfile$
+^Brewfile\.host$
+^README\.md$
+^MIGRATION\.md$
+^distrobox$
+^backup$
+# NOTE: a .stow-local-ignore REPLACES stow's built-in ignore list, so .git
+# and friends have to be re-listed here explicitly.
+^\.git$
+^\.gitignore$
+^\.stow-local-ignore$
+# Path patterns (anything with a slash) are matched against the full path;
+# segment patterns (no slash) against the basename at any depth.
+^init\.lua_bck$
+
+# opencode reads its config live - stowing/adopting it from inside a running
+# session breaks it (observed). Remove this line and run `stow -t ~ .` from a
+# plain TTY once opencode is not running.
+^opencode$

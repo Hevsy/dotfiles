@@ -1,8 +1,26 @@
-### Installation:
-From inside the dotfiles directory:
+### Fresh machine
+
 ```bash
-stow -t ~ .
+git clone https://github.com/Hevsy/dotfiles.git ~/dotfiles
+cd ~/dotfiles/distrobox
+./bootstrap-host.sh
 ```
+
+Host-only after that: `cd ~/dotfiles && stow --no-folding -t ~ .` if you ever
+want to re-link manually. `--no-folding` is required so per-directory
+exclusions in `.stow-local-ignore` (notably `.config/opencode`) are applied
+instead of a whole directory being symlinked. Host tools come from
+`Brewfile.host`.
+
+Then create/finish the dev container:
+
+```bash
+distrobox enter dev
+bash ~/dotfiles/distrobox/post-create.sh
+```
+
+Container tools come from the full `Brewfile` and the container's own
+Homebrew at `/home/linuxbrew/.linuxbrew`.
 
 ### Homebrew installation:
 ```bash

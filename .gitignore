@@ -1,6 +1,10 @@
 # Vim/Neovim cache/history, not config - regenerates itself, grows forever,
 # and is machine/session-specific (was mistakenly tracked since the first commit).
 .viminfo
+.zcompdump*
+
+# opencode generates this machine-local service password; never commit it.
+.config/opencode/service.json
 
 # opencode plugin-dev sandbox under .config/opencode - reinstallable, not config.
 .config/opencode/node_modules/

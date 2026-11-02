@@ -116,7 +116,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-[ -x "$HOME/.homebrew/bin/brew" ] && eval "$("$HOME/.homebrew/bin/brew" shellenv)"
+[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 command -v terraform &> /dev/null && complete -C "$(command -v terraform)" terraform
 

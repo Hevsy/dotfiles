@@ -20,7 +20,7 @@ set -euo pipefail
 
 # Non-interactive invocation (systemd) doesn't source .zshrc/.bashrc, so
 # make sure the shared Homebrew install (where rclone lives) is on PATH.
-eval "$("$HOME/.homebrew/bin/brew" shellenv)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_FILE="$HOME/.local/state/gdrive-backup.log"

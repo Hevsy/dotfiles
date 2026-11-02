@@ -1,10 +1,8 @@
-# Shared CLI tool list - installed to ~/.homebrew, which lives inside
-# $HOME and is therefore shared automatically between the Ubuntu host and
-# the Fedora "dev" distrobox (distrobox only shares $HOME, nothing else -
-# see MIGRATION.md for why a shared Homebrew install is safe here).
+# Full dev-container CLI tool list. Installed to the container's own
+# Homebrew at /home/linuxbrew/.linuxbrew (container rootfs, not shared with
+# the host). The host uses Brewfile.host instead - maintenance tools only.
 #
-# Run with: brew bundle --file=~/dotfiles/Brewfile
-# Same command, same result, on the host and inside the container.
+# Run with: brew bundle --file=~/dotfiles/Brewfile (inside the container)
 #
 # Not listed here: GUI apps (flatpak - see distrobox/host-packages.txt) and
 # terminal emulators (native packaging - see bootstrap-host.sh), since both

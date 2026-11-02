@@ -5,9 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-DEFAULT_USER="sago"
 # If you come from bash you might have to change your $PATH.
-export PATH=/usr/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -101,7 +100,6 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
   export EDITOR='nvim'
   export VISUAL='nvim'
-  export VISUAL EDITOR='nvim'
 fi
 
 # Compilation flags
@@ -147,15 +145,22 @@ alias tgp='terragrunt run-all plan'
 alias tga='terragrunt run-all apply -auto-approve'
 alias rg='source ranger ranger'
 alias lg='lazygit'
-alias la='la -la'
+alias la='ls -la'
 alias ll='ls -l'
 alias python="python3"
 alias oc="opencode"
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias rgr='rgrep --color'
 alias uvr='uv run'
-[ -x "$HOME/.homebrew/bin/brew" ] && eval "$("$HOME/.homebrew/bin/brew" shellenv)"
+[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 command -v direnv &> /dev/null && eval "$(direnv hook zsh)"
+
+# Rootless podman socket is shared into the dev container; point the docker
+# and podman clients at it instead of nesting a runtime inside the container.
+if [ -f /run/.containerenv ]; then
+  export DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
+  export CONTAINER_HOST="$DOCKER_HOST"
+fi
 
 export PATH="$HOME/Projects/delta-script:$PATH" 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -166,8 +171,6 @@ command -v aws_completer &> /dev/null && complete -C "$(command -v aws_completer
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 autoload -U +X bashcompinit && bashcompinit
-
-if [ -e /home/sago/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sago/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 #Deno
 export DENO_INSTALL="$HOME/.deno"

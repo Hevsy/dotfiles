@@ -1,10 +1,11 @@
 # Minimal dnf package list for the "dev" distrobox container.
 #
-# Homebrew (installed to ~/.homebrew, shared with the host via $HOME - see
-# ../Brewfile and MIGRATION.md) provides almost every CLI tool. This list is
-# just the OS-level bootstrap Homebrew itself needs, plus the container's
-# podman client (tightly coupled to the container runtime, so it stays a
-# system package rather than a brew formula).
+# The container has its own Homebrew install at the standard
+# /home/linuxbrew/.linuxbrew (inside the container rootfs - see
+# ../Brewfile and post-create.sh). This list is just the OS-level bootstrap
+# Homebrew itself needs, plus the container's podman client (tightly coupled
+# to the container runtime, so it stays a system package rather than a brew
+# formula).
 #
 # Blank lines and lines starting with # are stripped by bootstrap-host.sh
 # before being passed to `distrobox assemble` as additional_packages.
@@ -15,4 +16,8 @@ curl
 file
 git
 unzip
+bzip2
+patch
+which
+sudo
 podman-remote

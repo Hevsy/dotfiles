@@ -1,0 +1,34 @@
+# Host-only CLI tool list - maintenance QoL only.
+#
+# The Ubuntu host is deliberately minimal: it runs the terminal, tmux/nvim,
+# podman/distrobox, and the Google Drive backup. Everything cloud/k8s/IaC/
+# language-specific lives in the dev container's own Homebrew install (see
+# ../Brewfile and ../distrobox/post-create.sh), not here.
+#
+# Run with: brew bundle --file=~/dotfiles/Brewfile.host
+
+# --- shell, terminal, editor ---
+brew "zsh"
+brew "tmux"
+brew "neovim"
+brew "stow"
+
+# --- vcs / shell niceties ---
+brew "git"
+brew "gh"
+brew "fzf"
+brew "ripgrep"
+brew "bat"
+brew "fd"
+brew "tree"
+brew "direnv"
+
+# --- maintenance console ---
+brew "htop"
+brew "jq"
+brew "mc"
+brew "ranger"
+brew "lazygit"
+
+# --- backup (host only - see backup/gdrive-backup.sh and MIGRATION.md) ---
+brew "rclone"

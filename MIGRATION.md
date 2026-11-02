@@ -41,10 +41,9 @@ Confirm with IT/security before finalizing the host OS version.
 
 ## Strategy
 
-- **Host (Ubuntu)**: minimal OS packages, but still gets full console QOL
-  (zsh/tmux/neovim) for maintenance work, via the same dotfiles + shared
-  Homebrew install described below. Easy to reinstall/upgrade since it
-  holds almost no state of its own.
+- **Host (Ubuntu)**: minimal OS packages, plus a maintenance-only console
+  QOL (zsh/tmux/neovim) set via its own Homebrew install (`Brewfile.host`).
+  Easy to reinstall/upgrade since it holds almost no state of its own.
 - **Container ("dev", Fedora distrobox)**: the main dev environment -
   cloud/k8s CLIs, IaC tooling, same shell/editor setup. Defined
   declaratively in `distrobox/distrobox.ini` so it can be rebuilt from
@@ -52,51 +51,59 @@ Confirm with IT/security before finalizing the host OS version.
   distrobox.ini`), e.g. when bumping the Fedora base image.
 - **$HOME is shared** between host and container (distrobox's default -
   and *only* $HOME, not the rest of the host filesystem). That means
-  dotfiles, SSH keys, AWS/kube config, docker auth, and - see below -
-  Homebrew itself, are restored **once**, not duplicated per environment.
-- **One shared Homebrew install, one curated `Brewfile`.** No raw
+  dotfiles, SSH keys, AWS/kube config, docker auth, tmux plugins and
+  oh-my-zsh are restored **once**, not duplicated per environment.
+- **Two independent Homebrew installs, both at the standard prefix.** No raw
   `apt-mark`/`brew bundle dump` from the old box (full of one-off/forgotten
   packages), and no per-tool vendor curl installers either. See below.
 
-## Shared Homebrew (the actual trick here)
+## Homebrew (host and container are deliberately separate)
 
-Homebrew's standard Linux install path is `/home/linuxbrew/.linuxbrew`,
-which is **outside** `$HOME` and therefore *not* visible inside the
-container by default. The fix: install it to a custom prefix **inside**
-`$HOME` instead - `~/.homebrew` (an officially supported install method:
-`git clone https://github.com/Homebrew/brew ~/.homebrew`). Since that's
-inside the shared home, the host and the container see the literal same
-files - one Cellar, one `brew update`, used by both.
+Homebrew lives at its standard Linux path, `/home/linuxbrew/.linuxbrew`, on
+**both** sides:
 
-This is safe for our purposes because Homebrew's Linux bottles are
-prebuilt against an old/portable glibc baseline by design (that's the
-whole premise of "Linuxbrew" working across distros in the first place) -
-fine for the CLI-only tool list below. It would be a bad fit for anything
-needing deep OS/GUI integration, which is exactly why GUI apps go through
-flatpak instead (see `host-packages.txt`) and terminal emulators get
-native packaging (see Ghostty below) rather than a brew formula.
+- **Host**: its own install, tools from `Brewfile.host` (maintenance QoL only).
+- **Container**: its own install in the container rootfs, same path, tools
+  from the full `Brewfile`.
 
-- `Brewfile` (repo root) - the single curated CLI tool list. Run with
-  `brew bundle --file=~/dotfiles/Brewfile` on the host **and** inside the
-  container - same command, same result, since it's the same files.
-- `distrobox/packages-dnf.txt` / `distrobox/host-packages.txt` now only
-  carry the OS-level bootstrap packages Homebrew itself needs (build
-  tools, curl, git, etc.) plus a handful of things that have to stay
-  system packages (podman client in the container, podman/distrobox/
-  flatpak/ghostty on the host). These lists are small and stable - no
-  curation problem, nothing to mine from shell history for.
-- To sanity-check the `Brewfile` contents against actual usage before
-  finalizing it further, mine history on the old box:
+Same path on both sides means the dotfiles never branch on environment, but
+the Cellars are completely independent - the container's
+`/home/linuxbrew/.linuxbrew` is not the host's, because distrobox only shares
+`$HOME`. This is what makes it safe: bottles are never used across glibc/
+distro boundaries, and there is no chance of a Fedora-built binary ending up
+on the Ubuntu host (or vice versa).
+
+Rules that keep it that way:
+
+- **Never** add a `volume=` mapping `/home/linuxbrew` into the container.
+- The container's brew is wiped by `distrobox rm dev`; re-running
+  `post-create.sh` reinstalls it. Expect a slow rebuild.
+- Because `$HOME` is shared but the prefix isn't, the container sets
+  `HOMEBREW_CACHE=/home/linuxbrew/.cache` and `HOMEBREW_LOGS=/home/linuxbrew/.logs`
+  (container-local) so the two installs don't share downloads/locks.
+- `Brewfile` (repo root) - full dev tool list, container only. Run with
+  `brew bundle --file=~/dotfiles/Brewfile`.
+- `Brewfile.host` (repo root) - minimal host list (shell/editor, tmux,
+  maintenance tools, rclone). Run with
+  `brew bundle --file=~/dotfiles/Brewfile.host`.
+- `distrobox/packages-dnf.txt` / `distrobox/host-packages.txt` carry only the
+  OS-level bootstrap packages Homebrew itself needs (build tools, curl, git,
+  bzip2, patch, etc.) plus things that must stay system packages (podman
+  client in the container, podman/distrobox/flatpak on the host). These lists
+  are small and stable - no curation problem.
+- To sanity-check either Brewfile against actual usage, mine history:
   `cat ~/.*_history | awk '{print $1}' | sort | uniq -c | sort -rn | head -100`
 
 ## Repo layout added for this migration
 
 ```
 dotfiles/
-  Brewfile              # shared CLI tool list - see above
+  Brewfile              # full dev-container CLI tool list - see above
+  Brewfile.host         # minimal host maintenance tool list - see above
+  .stow-local-ignore    # keeps non-stowed files/opencode config out of $HOME
   .gitconfig            # credential helper now uses `gh` from PATH, not a
                          # hardcoded /home/linuxbrew/... path
-  .gitignore            # excludes .viminfo and the opencode plugin-dev sandbox - see below
+  .gitignore            # excludes .viminfo, zcompdump, opencode service.json - see below
   .ssh/config           # host aliases only - keys are NOT in this repo
   .p10k.zsh
   .tofurc
@@ -131,9 +138,9 @@ WSL/old-host-specific breakage found and fixed in `.zshrc`/`.bashrc`:
 - Removed `/mnt/c/Windows/...` PATH entries (WSL Windows interop, N/A on bare metal).
 - `.gitconfig` credential helper hardcoded `/home/linuxbrew/.linuxbrew/bin/gh`
   -> now just `gh` (resolved via PATH, works regardless of install method).
-- `brew shellenv` calls now point at the shared `~/.homebrew` prefix (see
-  above) instead of the old `/home/linuxbrew/.linuxbrew` path, still
-  guarded with `-x` so they're harmless no-ops before Homebrew exists.
+- `brew shellenv` calls point at the standard
+  `/home/linuxbrew/.linuxbrew` prefix, still guarded with `-x` so they're
+  harmless no-ops before Homebrew exists.
 - `aws_completer` completion call guarded with `command -v` instead of a
   hardcoded linuxbrew path - resolves correctly once the Brewfile's
   `awscli` formula is installed.
@@ -177,7 +184,9 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
   explicit `@catppuccin_window_status_style`, `status-left`/`status-right`
   assembled from `#{E:@catppuccin_status_...}` tokens) - ported from `dell`,
   with `tmux-sessionx` re-added (dropped there, kept here) and the shell path
-  fixed to the shared `~/.homebrew/bin/zsh`.
+  fixed to `/home/linuxbrew/.linuxbrew/bin/zsh`. catppuccin v2 is explicitly
+  `run` from `~/.tmux/plugins/catppuccin/tmux/catppuccin.tmux` - `@plugin`
+  alone only clones it and leaves the status tokens empty.
 - **`.config/nvim/lazy-lock.json`** (lazy.nvim's plugin lockfile, pins every
   plugin to an exact commit) is now committed for the first time - using
   **this WSL box's actual lockfile**, not `dell`'s. Diffed the two: every
@@ -206,6 +215,35 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
   (find `<old-commit>` by searching `homebrew-core`'s git log for the
   `neovim` formula around the date it was last known to work).
 
+## Breakages hit on the real Ubuntu 26.04 run
+
+Things the first pass got wrong, now fixed in the scripts above:
+
+- **`xargs -a host-packages.txt sudo apt install` fed comment lines to apt.**
+  Unlike the dnf list, the host list was never stripped (`#`, `Minimal`,
+  `Ubuntu`... treated as package names). Both lists are now filtered with
+  `grep -vE '^\s*#|^\s*$'`.
+- **Two Homebrew installs, one of them empty.** A stale `~/.homebrew` from
+  the original design plus a bare `git clone` into `/home/linuxbrew/.linuxbrew`
+  (no taps, empty Cellar) meant `brew` "worked" but installed nothing. Both
+  are now installed with the official installer, at the standard prefix, one
+  per environment.
+- **`stow` broke after a Homebrew perl upgrade** (`use lib .../perl/5.38.2_1`
+  hardcoded in `bin/stow` while perl was 5.44). A `brew reinstall stow` fixes
+  it; reinstalling from a fresh prefix avoids it entirely.
+- **`post-create.sh` stowed before brew existed**, so `stow` was not found in
+  a fresh container. Reordered: brew → bundle → stow.
+- **oh-my-zsh was never installed** and its failure was silent, leaving
+  `source $ZSH/oh-my-zsh.sh` failing on every zsh start. Now a hard check.
+- **tmux had three separate faults**: `default-shell` pointed at the old
+  `/home/sago` home, TPM was never installed, and catppuccin v2 was only
+  declared as `@plugin` (cloned, never sourced) - so the status line was
+  empty. All three are handled by `bootstrap-host.sh` and `.tmux.conf`.
+- **opencode rewrites its own config in place**, replacing the stow symlink
+  with a real file. That's why `~/.config/opencode` is excluded from stow in
+  `.stow-local-ignore`; stow it from a plain TTY only when no opencode
+  session is running, then remove the exclusion.
+
 ## Stow gotchas (learned the hard way)
 
 - **Installing packages before stowing, on a fresh machine.** `bootstrap-host.sh`/
@@ -214,7 +252,8 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
   path stow wants to symlink (Ghostty's config dir, possibly others) - plain
   `stow` then refuses every one of those as a conflict and aborts entirely,
   which is exactly what happened on `dell`. Fix (already applied in both
-  scripts): `stow --adopt -t ~ .` followed immediately by `git checkout -- .`.
+  scripts): `stow --no-folding --adopt -t ~ .` followed immediately by
+  `git checkout -- .`.
   `--adopt` claims the real file instead of erroring, but it does so by
   **overwriting the repo's tracked content with whatever the installer's
   default file contained** - the `git checkout` right after discards that and
@@ -222,6 +261,14 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
   symlink, with our content, not the installer's defaults. Worth running
   `git status` between the two commands once, just to see what actually got
   adopted/overwritten before discarding it.
+- **Folding defeats nested `.stow-local-ignore` rules.** If stow can fold a
+  whole directory into one symlink, it does so without consulting ignore
+  rules for children - so excluding `.config/opencode` silently did nothing
+  until `--no-folding` was added. Both scripts use `--no-folding` now; it
+  costs more individual symlinks but makes per-path exclusions reliable.
+- **A `.stow-local-ignore` replaces stow's built-in ignore list.** `.git`,
+  `.gitignore` and the ignore file itself have to be re-listed explicitly or
+  `~/.git` becomes a symlink into the repo.
 - **Apps rewriting config files in place, after initial setup.** On `dell`,
   `.config/ghostty` and `.local/share/mc` both started as stow symlinks and
   silently ended up as real files later - some app rewrote its config file
@@ -250,7 +297,7 @@ Root causes and the fixes applied here so this migration doesn't repeat them:
 - **Host maintenance console**: the distro's stock terminal app. Zero
   setup, used rarely (podman/distrobox issues, host package upgrades). It
   already gets full zsh/tmux/neovim QOL since the host runs the same
-  dotfiles + shared Homebrew as the container.
+  dotfiles + its own `Brewfile.host` install.
 - **Main work terminal**: Ghostty, configured with its `command` setting
   pointed at `~/.local/bin/dev-shell`, which just `exec`s
   `distrobox enter dev`. Keeps the terminal config decoupled from
@@ -364,9 +411,9 @@ cd ~/dotfiles/distrobox
 ```
 
 This installs podman/distrobox/flatpak/Ghostty on the host, sets up the
-shared `~/.homebrew` install and runs `brew bundle`, stows the dotfiles and
-installs oh-my-zsh on the host itself (so the stock terminal is immediately
-usable for maintenance), then assembles the `dev` Fedora container from
+host-only Homebrew install at `/home/linuxbrew/.linuxbrew`, runs
+`brew bundle --file=Brewfile.host`, stows the dotfiles, installs oh-my-zsh
+and the tmux plugins, then assembles the `dev` Fedora container from
 `distrobox.ini`.
 
 ### 3. Enter the container and finish setup
@@ -377,8 +424,9 @@ bash ~/dotfiles/distrobox/post-create.sh
 ```
 
 Stows the dotfiles again inside the container (same repo, same symlinks),
-confirms/installs the shared Homebrew tool set, and installs oh-my-zsh and
-krew plugins.
+installs the container's own Homebrew at `/home/linuxbrew/.linuxbrew`,
+runs the full `Brewfile`, and installs krew plugins plus the headless
+Neovim/Mason bootstrap.
 
 ### 4. Restore secrets and data
 
@@ -419,9 +467,10 @@ cd ~/dotfiles/distrobox && ./bootstrap-host.sh   # bumps the Fedora image too if
 distrobox enter dev && bash ~/dotfiles/distrobox/post-create.sh
 ```
 
-$HOME (and everything in it - dotfiles, keys, projects, `~/.homebrew`) is
-untouched by this, since all of that lives on the host side of the shared
-home mount.
+$HOME (and everything in it - dotfiles, keys, projects) is untouched by
+this, since all of that lives on the host side of the shared home mount.
+The container's own Homebrew install *is* lost, and `post-create.sh`
+reinstalls it - expect the rebuild to take as long as the first run.
 
 ## Explicitly excluded from backup (regenerate/reinstall instead of copying)
 
