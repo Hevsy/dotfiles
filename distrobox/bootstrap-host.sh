@@ -16,6 +16,7 @@ if [ -f /run/.containerenv ] || [ -f /.dockerenv ]; then
 fi
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$PWD"
 DOTFILES_DIR="$(cd .. && pwd)"
 BREW=/home/linuxbrew/.linuxbrew/bin/brew
 
@@ -116,13 +117,13 @@ export HOST_UID
 HOST_UID="$(id -u)"
 
 export EXTRA_PACKAGES
-EXTRA_PACKAGES="$(grep -vE '^\s*#|^\s*$' packages-dnf.txt | tr '\n' ' ')"
+EXTRA_PACKAGES="$(grep -vE '^\s*#|^\s*$' "$SCRIPT_DIR/packages-dnf.txt" | tr '\n' ' ')"
 
 echo "==> Assembling the dev container"
 if distrobox list 2>/dev/null | awk -F'|' '{gsub(/ /,"",$2); print $2}' | grep -qx dev; then
   echo "container 'dev' already exists - skipping assemble"
 else
-  distrobox assemble create -f distrobox.ini
+  distrobox assemble create -f "$SCRIPT_DIR/distrobox.ini"
 fi
 
 cat <<EOF
