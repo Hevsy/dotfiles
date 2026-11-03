@@ -1,5 +1,5 @@
 font-size = 10
-# theme = Galizur
+theme = Galizur
 background-image-opacity = 0.4
 background-image-fit = cover
 # background = black
