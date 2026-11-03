@@ -181,6 +181,14 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 eval "$(fzf --zsh)"
 
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  exec tmux new-session -A -s main
+  # distrobox shares the host's PID/net namespaces AND bind-mounts /tmp, so
+  # the default tmux socket (/tmp/tmux-$UID/default) is the SAME server on
+  # both sides - without -L these would be one shared "main" session, not
+  # two independent ones. Give the container its own named socket.
+  if [ -f /run/.containerenv ]; then
+    exec tmux -L dev new-session -A -s main
+  else
+    exec tmux new-session -A -s main
+  fi
 fi
 command -v tofu &> /dev/null && complete -o nospace -C "$(command -v tofu)" tofu

@@ -320,10 +320,16 @@ Things the first pass got wrong, now fixed in the scripts above:
   (Ghostty/Alacritty) are the deliberate exception since neither has an
   official flatpak - native packages/installers instead, no AppImage
   actually needed for either on current Ubuntu.
-- Note: the existing `.zshrc` auto-`tmux attach -s main` behavior fires
-  independently on the host and inside the container (separate process
-  namespaces) - two unrelated "main" sessions, one per environment.
-  Expected, not a bug.
+- The `.zshrc` auto-attach (`exec tmux new-session -A -s main`) uses a
+  **named socket inside the container** (`tmux -L dev`, gated on
+  `/run/.containerenv`). Without this, host and container would share one
+  "main" session instead of two independent ones: distrobox shares the
+  host's PID/net namespaces by default *and* bind-mounts `/tmp` for GUI/
+  D-Bus integration, so the default tmux socket
+  (`/tmp/tmux-$UID/default`) is literally the same server on both sides -
+  not isolated the way separate containers normally are. (An earlier draft
+  of this doc assumed namespace separation would keep the sessions apart;
+  it doesn't, hence the explicit `-L dev`.)
 
 ## Google Drive secondary backup
 
@@ -461,12 +467,15 @@ These broke on the move from WSL and need to be redone rather than restored:
   { "credHelpers": { "<account>.dkr.ecr.<region>.amazonaws.com": "ecr-login" } }
   ```
   for each ECR registry you use, and drop the `credsStore` line.
-- Set zsh as the default shell, on the host and in the container. The brew
-  zsh must be registered as a login shell first (`chsh` refuses anything not
-  listed in `/etc/shells`) - `bootstrap-host.sh` does this automatically, but
-  the `chsh` itself needs your password interactively:
+- Set zsh as the default shell. On the host, the brew zsh must be
+  registered as a login shell first (`chsh` refuses anything not listed in
+  `/etc/shells`) - `bootstrap-host.sh` does this automatically, but `chsh`
+  itself needs your password interactively:
   `chsh -s /home/linuxbrew/.linuxbrew/bin/zsh`
-  In the container's own shell: `chsh -s "$(command -v zsh)"`.
+  Inside the container, `post-create.sh` registers and sets the shell
+  automatically (container has its own `/etc/passwd`/`/etc/shells`,
+  separate from the host, and distrobox's created user typically has
+  passwordless sudo).
 - Point Ghostty's `command` config at `~/.local/bin/dev-shell` (already in
   the stowed `~/.config/ghostty/config`).
 

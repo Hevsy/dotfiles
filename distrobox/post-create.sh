@@ -63,6 +63,18 @@ if [ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]; then
     "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
+echo "==> Registering brew's zsh + setting the container's default shell"
+# The container has its own /etc/passwd and /etc/shells (separate from the
+# host - distrobox only shares $HOME), so chsh fails here even after it
+# succeeded on the host. distrobox containers get passwordless sudo for the
+# created user, so this runs non-interactively; if sudo still prompts, run
+# the two lines manually.
+ZSH_BIN="$(command -v zsh)"
+if ! grep -qxF "$ZSH_BIN" /etc/shells 2>/dev/null; then
+  echo "$ZSH_BIN" | sudo tee -a /etc/shells
+fi
+sudo usermod -s "$ZSH_BIN" "$(whoami)"
+
 echo "==> krew plugins"
 PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" kubectl krew install neat ctx ns
 
@@ -76,7 +88,6 @@ nvim --headless "+Lazy! sync" "+MasonToolsUpdate" +qa || true
 cat <<'EOF'
 
 Done. Still TODO manually:
-  - chsh -s "$(command -v zsh)"          (set zsh as the container's default shell)
   - aws sso login --sso-session rdc      (re-auth, don't copy cached SSO tokens)
   - aws eks update-kubeconfig --name ... (regenerate kube contexts per cluster)
   - point ~/.docker/config.json credsStore at ecr-login (docker-credential-helper-ecr,
