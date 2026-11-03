@@ -22,8 +22,11 @@ BREW=/home/linuxbrew/.linuxbrew/bin/brew
 # $HOME is shared with the host, so keep the container brew's download cache
 # and logs inside the container rootfs. Sharing them with the host install
 # invites cross-distro cache/lock confusion.
-export HOMEBREW_CACHE=/home/linuxbrew/.cache
-export HOMEBREW_LOGS=/home/linuxbrew/.logs
+# Target INSIDE the .linuxbrew prefix: its parent /home/linuxbrew stays
+# root-owned after the standard installer (only the prefix is chowned), so
+# /home/linuxbrew/.cache would be unwritable (EACCES on first brew call).
+export HOMEBREW_CACHE=/home/linuxbrew/.linuxbrew/.cache
+export HOMEBREW_LOGS=/home/linuxbrew/.linuxbrew/.logs
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
 
