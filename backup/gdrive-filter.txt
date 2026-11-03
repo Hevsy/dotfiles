@@ -12,10 +12,13 @@
 # every time some tool adds a new dotdir.
 
 # --- specific excludes (must precede the includes they override) ---
-- /Projects/RDC_TF/wb-i1-legacy/_old/**
 - /efs-utils/src/proxy/target/**
 - .cache/**
 - *.zcompdump*
+
+# /Projects is deliberately NOT included below - security team requested it
+# be excluded from this backup entirely. Don't add a "+ /Projects/**" line;
+# the trailing "- *" deny-all already covers it since nothing includes it.
 
 # --- standard XDG dirs (where the copied-over Windows Documents/Pictures/etc land) ---
 + /Documents/**
@@ -26,7 +29,6 @@
 + /Music/**
 
 # --- real project/data dirs ---
-+ /Projects/**
 + /medusa/**
 + /efs-utils/**
 + /scripts/**

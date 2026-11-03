@@ -350,6 +350,15 @@ black box" approach.
   new tools get installed, so a denylist needs constant upkeep to stay
   complete. An allowlist just... doesn't include them, ever, with zero
   maintenance.
+- **`Projects` is deliberately excluded**, per a security team request -
+  it's left out of the allowlist entirely rather than added as an explicit
+  exclude rule. The timer had never been enabled/run before this was
+  caught, so nothing from `Projects` ever reached Drive; no remote cleanup
+  was needed. If a similar exclusion is ever needed *after* a dir has
+  already synced, note that `rclone sync` treats filtered-out paths as
+  invisible, not as "deleted from source" - removing an `+` include stops
+  future syncing but does **not** remove what's already on the remote;
+  that needs a manual `rclone purge gdrive:Backup/<dir>`.
 - **`rclone sync`, not `copy`** - a true mirror. Deleting a file locally
   deletes it from Drive on the next run too (same behavior Windows's Drive
   client has). Chosen deliberately over the safer `copy` (which only ever
