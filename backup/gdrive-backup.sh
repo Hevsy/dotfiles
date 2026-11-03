@@ -16,6 +16,12 @@
 #
 # Run automatically every 30 min by the gdrive-backup.timer systemd user
 # unit (see ../.config/systemd/user/gdrive-backup.{service,timer}).
+#
+# No --log-file: rclone's own log lines go to stdout/stderr, which the
+# oneshot service lets systemd capture into the user journal - size-capped
+# and rotated by journald already, so there's no separate log file to grow
+# forever or rotate by hand. Check recent runs with:
+#   journalctl --user -u gdrive-backup --since -1d
 set -euo pipefail
 
 # Non-interactive invocation (systemd) doesn't source .zshrc/.bashrc, so
@@ -23,10 +29,8 @@ set -euo pipefail
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="$HOME/.local/state/gdrive-backup.log"
-mkdir -p "$(dirname "$LOG_FILE")"
 
 rclone sync "$HOME" "gdrive:Backup" \
   --filter-from "$SCRIPT_DIR/gdrive-filter.txt" \
   --fast-list \
-  --log-file "$LOG_FILE" --log-level INFO
+  --log-level INFO

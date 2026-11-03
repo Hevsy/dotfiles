@@ -376,6 +376,11 @@ black box" approach.
   into that path, so there's no real exposure risk today).
   `bootstrap-host.sh` checks for the `gdrive:` remote and enables the timer
   automatically if found, otherwise prints the one-time setup steps.
+- **Logging goes to the user journal, not a file.** The service is a
+  `Type=oneshot` with no `--log-file` passed to rclone, so its stdout/stderr
+  land in the systemd user journal, which journald already size-caps and
+  rotates - no log file growing forever, nothing to rotate by hand. Check
+  recent runs with `journalctl --user -u gdrive-backup --since -1d`.
 
 ## Step-by-step
 
