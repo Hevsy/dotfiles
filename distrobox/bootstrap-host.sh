@@ -107,6 +107,10 @@ tmux_clone https://github.com/tmux-plugins/tmux-continuum tmux-continuum
 tmux_clone https://github.com/omerxx/tmux-sessionx        tmux-sessionx
 tmux_clone https://github.com/catppuccin/tmux             catppuccin/tmux
 
+echo "==> Enabling lingering (lets user systemd units, e.g. the gdrive backup"
+echo "    timer, keep running while logged out)"
+sudo loginctl enable-linger "$USER"
+
 echo "==> Google Drive secondary backup (rclone)"
 if "$BREW" list rclone >/dev/null 2>&1 && rclone listremotes 2>/dev/null | grep -q '^gdrive:'; then
   systemctl --user enable --now gdrive-backup.timer

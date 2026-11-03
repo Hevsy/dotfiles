@@ -377,6 +377,11 @@ black box" approach.
   risk quota throttling as Projects/media grow) for what's a secondary
   safety-net backup, not live collaboration. 30 min means "lose at most
   that much" if the disk dies - a fine bar for this.
+- **Lingering is enabled** (`loginctl enable-linger`, done once by
+  `bootstrap-host.sh`) so the timer keeps firing even when logged out -
+  without it, systemd stops the whole `--user` instance (and this timer
+  with it) on logout, e.g. a fast user-switch or closing a non-sleeping
+  session. Check with `loginctl show-user "$USER" --property=Linger`.
 - **One-time setup, not scripted**: `rclone config` needs an interactive
   browser for Google's OAuth flow, so it can't be automated blind. Create
   a remote named exactly `gdrive` (type: Google Drive). `rclone.conf` (the
