@@ -36,6 +36,14 @@ else
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
 fi
 
+echo "==> Registering brew's zsh as a login shell + setting default"
+# chsh refuses any shell not listed in /etc/shells; the brew symlink path is
+# stable across formula upgrades (the Cellar path behind it changes, the
+# symlink doesn't).
+if ! grep -xF "/home/linuxbrew/.linuxbrew/bin/zsh" /etc/shells; then
+  echo "/home/linuxbrew/.linuxbrew/bin/zsh" | sudo tee -a /etc/shells
+fi
+
 echo "==> Enabling the rootless podman socket (needed for container sharing)"
 systemctl --user enable --now podman.socket
 

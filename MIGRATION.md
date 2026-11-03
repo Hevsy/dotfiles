@@ -461,9 +461,14 @@ These broke on the move from WSL and need to be redone rather than restored:
   { "credHelpers": { "<account>.dkr.ecr.<region>.amazonaws.com": "ecr-login" } }
   ```
   for each ECR registry you use, and drop the `credsStore` line.
-- Set zsh as the default shell, on the host and in the container:
-  `chsh -s "$(command -v zsh)"`.
-- Point Ghostty's `command` config at `~/.local/bin/dev-shell`.
+- Set zsh as the default shell, on the host and in the container. The brew
+  zsh must be registered as a login shell first (`chsh` refuses anything not
+  listed in `/etc/shells`) - `bootstrap-host.sh` does this automatically, but
+  the `chsh` itself needs your password interactively:
+  `chsh -s /home/linuxbrew/.linuxbrew/bin/zsh`
+  In the container's own shell: `chsh -s "$(command -v zsh)"`.
+- Point Ghostty's `command` config at `~/.local/bin/dev-shell` (already in
+  the stowed `~/.config/ghostty/config`).
 
 ### 6. Rebuilding/upgrading the container later
 
