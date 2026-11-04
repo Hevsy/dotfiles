@@ -17,6 +17,10 @@
 .config/rclone/
 rclone.conf
 
+# Real server IPs/keys - this repo is public; see .ssh/config.local.example
+# and .ssh/config's Include directive.
+.ssh/config.local
+
 # vim/nvim swap and backup files
 .*.sw[po]
 *.sw[po]
