@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Pick a k9s skin with fzf and apply it live.
+#
+# k9s config.yaml has `ui.reactive: true`, which makes k9s watch config.yaml
+# and hot-reload on save -- so rewriting the `skin:` line here updates any
+# already-running k9s instance instantly, no restart needed.
+set -euo pipefail
+
+skins_dir="$HOME/dotfiles/.config/k9s/skins"
+config="$HOME/dotfiles/.config/k9s/config.yaml"
+
+if [[ ! -d "$skins_dir" ]]; then
+	echo "k9s-skin: skins dir not found: $skins_dir" >&2
+	exit 1
+fi
+
+if [[ ! -f "$config" ]]; then
+	echo "k9s-skin: config not found: $config" >&2
+	exit 1
+fi
+
+# Direct mode: `k9s-skin dracula` sets it without opening fzf.
+if [[ $# -gt 0 ]]; then
+	skin="$1"
+	if [[ ! -f "$skins_dir/$skin.yaml" ]]; then
+		echo "k9s-skin: no such skin '$skin' in $skins_dir" >&2
+		exit 1
+	fi
+else
+	if ! command -v fzf >/dev/null 2>&1; then
+		echo "k9s-skin: fzf is required for interactive mode" >&2
+		exit 1
+	fi
+
+	preview_cmd='cat'
+	if command -v bat >/dev/null 2>&1; then
+		preview_cmd='bat --color=always --style=plain --language=yaml'
+	fi
+
+	skin=$(
+		find "$skins_dir" -maxdepth 1 -name '*.yaml' -printf '%f\n' |
+			sed 's/\.yaml$//' |
+			sort |
+			fzf --prompt='k9s skin> ' \
+				--preview="$preview_cmd '$skins_dir'/{}.yaml" \
+				--preview-window=right:60%
+	)
+fi
+
+if [[ -z "${skin:-}" ]]; then
+	echo "k9s-skin: no skin selected" >&2
+	exit 1
+fi
+
+# k9s watches config.yaml by inode (fsnotify.Add on the exact file), not by
+# directory. `sed -i` does an atomic rename-over-file, which swaps in a new
+# inode and silently breaks that watch until k9s is restarted. Writing
+# through `>` instead truncates the existing file in place, keeping the
+# inode, so the running k9s's watcher actually sees the change.
+new_content=$(sed -E "s/^(\s*)skin: .*/\1skin: ${skin}/" "$config")
+printf '%s\n' "$new_content" >"$config"
+echo "k9s-skin: applied '${skin}'"

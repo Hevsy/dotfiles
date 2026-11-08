@@ -115,6 +115,7 @@ fi
 alias v="nvim"
 alias vim="nvim"
 alias k9="k9s"
+alias k9sk="k9s-skin"
 alias k="kubectl"
 alias kn="kubens"
 alias kx="kubectx"
