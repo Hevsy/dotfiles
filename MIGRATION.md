@@ -331,12 +331,12 @@ Things the first pass got wrong, now fixed in the scripts above:
   of this doc assumed namespace separation would keep the sessions apart;
   it doesn't, hence the explicit `-L dev`.)
 
-## Google Drive secondary backup
+## Google Drive secondary sync
 
 A second, ongoing safety net on top of the one-time migration tarball below
-- `Documents`/`Pictures`/`Downloads`/etc (where the copied-over Windows
-files land) plus `Projects`/`medusa`/`efs-utils`/`scripts`/`bin` get mirrored
-to Google Drive continuously, host-only (not run inside the container).
+- `Documents`/`Pictures`/`Downloads`/etc plus `Projects`/`medusa`/
+`efs-utils`/`scripts`/`bin` get kept in sync with the root of the `gdrive`
+remote, host-only (not run inside the container).
 
 Why `rclone` instead of a GUI client: Google doesn't ship a native Linux
 Drive app. The only real GUI option (Insync) is paid; `rclone` is free,
@@ -352,19 +352,54 @@ black box" approach.
   maintenance.
 - **`Projects` is deliberately excluded**, per a security team request -
   it's left out of the allowlist entirely rather than added as an explicit
-  exclude rule. The timer had never been enabled/run before this was
-  caught, so nothing from `Projects` ever reached Drive; no remote cleanup
-  was needed. If a similar exclusion is ever needed *after* a dir has
-  already synced, note that `rclone sync` treats filtered-out paths as
-  invisible, not as "deleted from source" - removing an `+` include stops
-  future syncing but does **not** remove what's already on the remote;
-  that needs a manual `rclone purge gdrive:Backup/<dir>`.
-- **`rclone sync`, not `copy`** - a true mirror. Deleting a file locally
-  deletes it from Drive on the next run too (same behavior Windows's Drive
-  client has). Chosen deliberately over the safer `copy` (which only ever
-  adds/updates, never deletes remotely) - if that tradeoff turns out to be
-  the wrong call in practice, swap `sync` for `copy` in
-  `backup/gdrive-backup.sh`.
+  exclude rule.
+- **`rclone bisync`, not `sync`** - true two-way sync. A change made in
+  the Drive web UI (edit, add, delete) propagates down to the local
+  machine on the next run, same as a local change propagates up. This
+  replaced an earlier one-way `rclone sync` design that mirrored into a
+  `Backup` subfolder on Drive (local → Drive only); switched to bisync so
+  that sorting/organizing files from the Drive web UI (see the Documents
+  merge below) flows back down automatically instead of requiring a
+  separate pull step.
+  - **Filters file, not `--filter-from`**: bisync specifically wants
+    `--filters-file` - it stores a hash of that file and refuses to run
+    (demanding a fresh `--resync`) if the file changes between runs. Any
+    edit to `gdrive-filter.txt` needs a manual one-off
+    `rclone bisync "$HOME" gdrive: --filters-file gdrive-filter.txt --resync`
+    before the timer's normal (no `--resync`) runs will work again.
+  - **Conflict handling**: if the same file changes on both sides between
+    runs, the default (`--conflict-resolve none`) keeps both, renaming the
+    loser with a `.conflict1`/`.conflict2` suffix rather than picking a
+    winner automatically - sort those by hand when they show up.
+  - **Safety check**: bisync refuses to propagate deletions past
+    `--max-delete` (default 50% of files) and aborts instead - a stuck/
+    failed run shows up as an `ERROR`/non-zero exit in the journal, not a
+    silent success like plain `sync` was. Check periodically, not just
+    assumed-fine.
+  - **State lives in `~/.cache/rclone/bisync/`** (per-path-pair listing
+    snapshots). Treat it as precious - deleting it forces a `--resync`
+    (safe, just re-baselines; not destructive, but needs a manual run).
+- **Documents merge from the old Windows migration (one-time, 2026-11-05)**:
+  Drive already had a top-level `Documents` folder from the original
+  Windows → Linux migration tarball, containing a full nested dump
+  (`Documents/Pictures`, `Documents/Desktop`, loose misc files, etc.) -
+  not a clean match for a `Documents` folder synced 1:1 with
+  `~/Documents`. Resolved by renaming it to `Documents_win_legacy` *before*
+  the first `--resync` - an allowlist entry only matches its exact literal
+  path, so the differently-named folder falls through to the trailing
+  `- *` deny-all automatically and is simply never touched by bisync, no
+  exclude rule needed. The one-off `--resync` then populated fresh
+  `Documents`/`Pictures`/etc. at Drive root purely from local content.
+  `Documents_win_legacy` is being sorted manually via the Drive web UI
+  into the proper root folders at leisure - bisync picks up anything moved
+  into an allowlisted folder and copies it down to `$HOME` on the next
+  run (new files are only ever copied, never deleted, so this is safe to
+  do gradually with the timer running). Watch for Drive's lack of
+  same-name collision prompts when dragging files over (rename manually on
+  conflict rather than leaving duplicate names in one folder - rclone
+  tends to warn/skip on those). The old `Backup/` folder from the
+  pre-bisync one-way design was merged into the respective root folders
+  and can be purged (`rclone purge gdrive:Backup`) once confirmed clean.
 - **Not stowed.** `backup/gdrive-backup.sh` and `gdrive-filter.txt` are
   referenced by their repo path directly (`~/dotfiles/backup/...`), same
   pattern as `Brewfile`/`distrobox/*` - no need for them to live at a
@@ -375,7 +410,7 @@ black box" approach.
   continuous/real-time. A fixed-interval full-tree scan+compare every
   minute would be wasteful (CPU/disk, and repeated Drive API listing calls
   risk quota throttling as Projects/media grow) for what's a secondary
-  safety-net backup, not live collaboration. 30 min means "lose at most
+  safety-net sync, not live collaboration. 30 min means "lose at most
   that much" if the disk dies - a fine bar for this.
 - **Lingering is enabled** (`loginctl enable-linger`, done once by
   `bootstrap-host.sh`) so the timer keeps firing even when logged out -

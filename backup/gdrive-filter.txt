@@ -1,4 +1,5 @@
-# rclone filter rules for gdrive-backup.sh.
+# rclone filter rules for gdrive-backup.sh (used with bisync's
+# --filters-file - same rule syntax as --filter-from).
 #
 # rclone evaluates rules top-to-bottom and stops at the first match, so
 # specific excludes must come BEFORE the broader "+" includes below them -
@@ -10,6 +11,13 @@
 # Anything app-state/config-ish (.config, .local, .cache, .ssh, .aws, etc)
 # is simply never listed, so it's never touched - no exclude-list upkeep
 # every time some tool adds a new dotdir.
+#
+# gdrive:/Documents_win_legacy (the old Windows home-folder dump, being
+# manually sorted into the dirs below via the Drive web UI) is deliberately
+# NOT named here - an allowlist entry only matches its exact literal path,
+# so a differently-named top-level dir falls through to "- *" automatically
+# and is never touched by bisync in either direction. No exclude rule
+# needed for it.
 
 # --- specific excludes (must precede the includes they override) ---
 - /efs-utils/src/proxy/target/**
@@ -21,9 +29,12 @@
 # the trailing "- *" deny-all already covers it since nothing includes it.
 
 # --- standard XDG dirs (where the copied-over Windows Documents/Pictures/etc land) ---
+# /Downloads is deliberately NOT included - it's full of transient heavy
+# stuff (installers, archives, ISOs) not worth the bandwidth/Drive quota.
+# Already-uploaded content under gdrive:/Downloads from before this
+# exclusion is left in place, not auto-deleted (see MIGRATION.md).
 + /Documents/**
 + /Pictures/**
-+ /Downloads/**
 + /Desktop/**
 + /Videos/**
 + /Music/**

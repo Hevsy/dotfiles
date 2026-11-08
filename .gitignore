@@ -17,6 +17,10 @@
 .config/rclone/
 rclone.conf
 
+# rclone bisync's filters-file change-detection hash, written next to
+# gdrive-filter.txt on every run - a runtime artifact, not repo content.
+backup/gdrive-filter.txt.md5
+
 # Real server IPs/keys - this repo is public; see .ssh/config.local.example
 # and .ssh/config's Include directive.
 .ssh/config.local
