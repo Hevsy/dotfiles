@@ -1,8 +1,9 @@
 font-size = 10
 theme = Galizur
-background-image-opacity = 0.4
+background-image = /home/pparinov/Pictures/mariola-grobelska-OJiXDZivnnE-unsplash.jpg
+background-image-opacity = 0.01
 background-image-fit = cover
-# background = black
+background = black
 # Drops straight into the dev distrobox instead of a bare host shell - see ~/.local/bin/dev-shell
 command = /home/pparinov/.local/bin/dev-shell
 maximize = true
