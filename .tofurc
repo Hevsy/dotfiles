@@ -1,1 +1,1 @@
-plugin_cache_dir = "~/.cache/opentofu/plugin-cache"
+plugin_cache_dir = "$HOME/.cache/opentofu/plugin-cache"
