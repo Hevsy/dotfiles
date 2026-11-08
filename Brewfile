@@ -23,6 +23,10 @@ brew "direnv"
 # this version + the pinned .config/nvim/lazy-lock.json. If an upgrade breaks
 # LSPs/linters, see MIGRATION.md for how to reinstall this exact version.
 brew "neovim"
+# required by nvim-treesitter (:TSUpdate) to compile parsers
+brew "tree-sitter-cli"
+# required by Mason to install yaml-language-server (npm-based)
+brew "node"
 
 # --- vcs ---
 brew "git"
